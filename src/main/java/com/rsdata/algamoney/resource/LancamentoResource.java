@@ -21,8 +21,8 @@ import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
 import com.rsdata.algamoney.service.LancamentoService;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/lancamentos")

@@ -24,8 +24,8 @@ import com.rsdata.algamoney.model.Pessoa;
 import com.rsdata.algamoney.repository.PessoaRepository;
 import com.rsdata.algamoney.service.PessoaService;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/pessoas")
