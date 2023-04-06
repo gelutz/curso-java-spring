@@ -17,7 +17,6 @@ public class Usuario {
 	@Id
 	private Long id;
 
-	private String codigo;
 	private String nome;
 	private String email;
 	private String senha;
@@ -32,14 +31,6 @@ public class Usuario {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
 	}
 
 	public String getNome() {
