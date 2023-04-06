@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.rsdata.algamoney.errors.UsernameNotFoundException;
 import com.rsdata.algamoney.model.Usuario;
-import com.rsdata.algamoney.repository.PessoaRepository;
 import com.rsdata.algamoney.repository.UsuarioRepository;
 
 @Service
@@ -22,15 +21,11 @@ public class AppUserDetailsService implements UserDetailsService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	@Autowired
-	private PessoaRepository pessoaRepository;
-
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		// Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(
-		// () -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
-		System.out.println("-x-x-:" + pessoaRepository.findAll().toString());
-		Usuario usuario = usuarioRepository.findAll().get(0);
+		Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(
+				() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
+
 		return new User(email, usuario.getSenha(), getPermissoes(usuario));
 	}
 

@@ -1,11 +1,15 @@
 package com.rsdata.algamoney.resource;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +25,6 @@ import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
 import com.rsdata.algamoney.service.LancamentoService;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/lancamentos")
 public class LancamentoResource {
@@ -37,6 +38,7 @@ public class LancamentoResource {
 	private LancamentoRepository lancamentoRepository;
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
 	public ResponseEntity<Page<Lancamento>> pesquisar(LancamentoFilter filter, Pageable pageable) {
 		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, pageable);
 
