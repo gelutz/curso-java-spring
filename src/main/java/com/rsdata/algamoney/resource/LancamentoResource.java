@@ -23,6 +23,7 @@ import com.rsdata.algamoney.event.RecursoCriadoEvent;
 import com.rsdata.algamoney.model.Lancamento;
 import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
+import com.rsdata.algamoney.repository.projection.ResumoLancamento;
 import com.rsdata.algamoney.service.LancamentoService;
 
 @RestController
@@ -45,7 +46,16 @@ public class LancamentoResource {
 		return ResponseEntity.ok(lancamentos);
 	}
 
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+	public ResponseEntity<Page<ResumoLancamento>> resumir(LancamentoFilter filter, Pageable pageable) {
+		Page<ResumoLancamento> lancamento = lancamentoService.resumir(filter, pageable);
+
+		return ResponseEntity.ok(lancamento);
+	}
+
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> buscarPorId(@PathVariable Long id) {
 		Lancamento lancamento = lancamentoService.buscarPorId(id);
 
@@ -54,6 +64,7 @@ public class LancamentoResource {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> criarLancamento(@Valid @RequestBody Lancamento lancamento,
 			HttpServletResponse response) {
 		Lancamento novoLancamento = lancamentoService.criar(lancamento);
@@ -65,6 +76,7 @@ public class LancamentoResource {
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_LANCAMENTO')")
 	public void removerLancamentoPorId(@PathVariable Long id) {
 		lancamentoService.remover(id);
 	}

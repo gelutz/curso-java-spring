@@ -1,8 +1,7 @@
 package com.rsdata.algamoney.model;
 
 import java.math.BigDecimal;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -29,10 +27,10 @@ public class Lancamento {
 
 	@NotNull
 	@Column(name = "data_vencimento")
-	private String dataVencimento;
+	private LocalDate dataVencimento;
 
 	@Column(name = "data_pagamento")
-	private String dataPagamento;
+	private LocalDate dataPagamento;
 
 	@NotNull
 	private BigDecimal valor;
@@ -67,19 +65,19 @@ public class Lancamento {
 		this.descricao = descricao;
 	}
 
-	public String getDataVencimento() {
+	public LocalDate getDataVencimento() {
 		return this.dataVencimento;
 	}
 
-	public void setDataVencimento(String dataVencimento) {
+	public void setDataVencimento(LocalDate dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
 
-	public String getDataPagamento() {
+	public LocalDate getDataPagamento() {
 		return this.dataPagamento;
 	}
 
-	public void setDataPagamento(String dataPagamento) {
+	public void setDataPagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
 

@@ -1,5 +1,17 @@
 package com.rsdata.algamoney.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
 import com.rsdata.algamoney.errors.BadRequestException;
 import com.rsdata.algamoney.errors.NotFoundException;
 import com.rsdata.algamoney.model.Categoria;
@@ -7,18 +19,7 @@ import com.rsdata.algamoney.model.Lancamento;
 import com.rsdata.algamoney.model.Pessoa;
 import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
+import com.rsdata.algamoney.repository.projection.ResumoLancamento;
 
 @Service
 public class LancamentoService {
@@ -42,6 +43,16 @@ public class LancamentoService {
 
 	public Page<Lancamento> pesquisar(LancamentoFilter filter, Pageable page) {
 		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, page);
+
+		if (ObjectUtils.isEmpty(lancamentos)) {
+			throw new NotFoundException(this.NotFoundMessage());
+		}
+
+		return lancamentos;
+	}
+
+	public Page<ResumoLancamento> resumir(LancamentoFilter filter, Pageable page) {
+		Page<ResumoLancamento> lancamentos = lancamentoRepository.resumir(filter, page);
 
 		if (ObjectUtils.isEmpty(lancamentos)) {
 			throw new NotFoundException(this.NotFoundMessage());

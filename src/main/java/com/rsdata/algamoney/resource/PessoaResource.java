@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +28,6 @@ import com.rsdata.algamoney.model.Pessoa;
 import com.rsdata.algamoney.repository.PessoaRepository;
 import com.rsdata.algamoney.service.PessoaService;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaResource {
@@ -42,6 +43,7 @@ public class PessoaResource {
 
 	// [GET]
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
 	public List<Pessoa> listar() {
 		List<Pessoa> todasPessoas = pessoaRepository.findAll();
 		List<Pessoa> pessoasAtivas = new ArrayList<Pessoa>();
@@ -55,6 +57,7 @@ public class PessoaResource {
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
 	public ResponseEntity<Pessoa> buscarPorId(@PathVariable Long id) {
 		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
 
@@ -69,6 +72,7 @@ public class PessoaResource {
 	// [POST]
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Pessoa> criarPessoa(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 		Pessoa novaPessoa = pessoaRepository.save(pessoa);
 
@@ -79,6 +83,7 @@ public class PessoaResource {
 
 	@PostMapping("/{id}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<?> reativarPessoa(@PathVariable Long id) {
 		Pessoa pessoaAtualizada = pessoaServices.reativarPessoa(id);
 
@@ -93,6 +98,7 @@ public class PessoaResource {
 	// [PUT]
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
 		Pessoa pessoaAtualizada = pessoaServices.atualizar(id, pessoa);
 
@@ -104,6 +110,7 @@ public class PessoaResource {
 	}
 
 	@PutMapping("/{id}/ativo")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Object> atualizarAtivo(@PathVariable Long id, @Valid @RequestBody boolean ativo) {
 		Pessoa pessoa = ativo
 				? pessoaServices.reativarPessoa(id)
@@ -118,6 +125,7 @@ public class PessoaResource {
 
 	@PutMapping("/{id}/endereco")
 	@ResponseStatus(HttpStatus.ACCEPTED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Object> atualizarEndereco(@PathVariable Long id, @Valid @RequestBody Endereco enderecoNovo) {
 		Pessoa pessoaAtualizada = pessoaServices.atualizarEndereco(id, enderecoNovo);
 
@@ -131,6 +139,7 @@ public class PessoaResource {
 	// [DELETE]
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA')")
 	public ResponseEntity<Object> desativarPessoa(@PathVariable Long id) {
 		Optional<Pessoa> object = pessoaRepository.findById(id);
 
