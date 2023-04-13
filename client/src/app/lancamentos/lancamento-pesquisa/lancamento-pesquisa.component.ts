@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { LazyLoadEvent } from 'primeng/api';
+import { ResponseDTO } from 'src/app/@types/ResponseDTO';
 import { formatDateToISO } from 'src/app/core/utils/DateFormatter';
 import { LancamentoDTO } from '../@types/LancamentoDTO';
 import { LancamentoService } from '../lancamento.service';
@@ -10,22 +12,27 @@ import { LancamentoService } from '../lancamento.service';
 })
 export class LancamentoPesquisaComponent {
 
-	PAGINA_INICIAL = 0
 	ITENS_POR_PAGINA = 5
 
 	descricao = ""
-	vencimentoDe: Date | undefined
-	vencimentoAte: Date | undefined
-	lancamentos: LancamentoDTO[] = [];
+	vencimentoDe?: Date
+	vencimentoAte?: Date
+	response: ResponseDTO<LancamentoDTO> = {} as ResponseDTO<LancamentoDTO>
+
 	constructor(private lancamentoService: LancamentoService) { }
 
-	async pesquisar(): Promise<void> {
-		this.lancamentos = await this.lancamentoService.pesquisar({
+	async pesquisar(pagina = 0): Promise<void> {
+		this.response = await this.lancamentoService.pesquisar({
+			itensPorPagina: this.ITENS_POR_PAGINA,
+			pagina,
 			descricao: this.descricao,
 			vencimentoDe: formatDateToISO(this.vencimentoDe),
-			vencimentoAte: formatDateToISO(this.vencimentoAte),
-			itensPorPagina: this.ITENS_POR_PAGINA,
-			pagina: this.PAGINA_INICIAL
+			vencimentoAte: formatDateToISO(this.vencimentoAte)
 		})
+	}
+
+	aoMudarDePagina(event: LazyLoadEvent): void {
+		const pagina = (event.first ?? 0) / (event.rows ?? 1)
+		this.pesquisar(pagina)
 	}
 }

@@ -5,4 +5,5 @@ export type LancamentoDTO = {
 	dataPagamento?: Date;
 	valor: number;
 	pessoa: string;
+	totalItens: number;
 }

@@ -13,35 +13,33 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
-import { LancamentoGridComponent } from './lancamento-grid/lancamento-grid.component';
 import { LancamentoPesquisaComponent } from './lancamento-pesquisa/lancamento-pesquisa.component';
 
 
 @NgModule({
-  declarations: [
-    LancamentoCadastroComponent,
-    LancamentoGridComponent,
-    LancamentoPesquisaComponent
-  ],
-  imports: [
-    CommonModule,
-    BrowserAnimationsModule,
-    InputTextModule,
-    ButtonModule,
-    TableModule,
-    TooltipModule,
-    FormsModule,
-    CalendarModule,
-    SelectButtonModule,
-    DropdownModule,
-    InputNumberModule,
-    FormsModule,
-    MessageModule,
-    HttpClientModule
-  ],
-  exports: [
-    LancamentoCadastroComponent,
-    LancamentoPesquisaComponent
-  ]
+	declarations: [
+		LancamentoCadastroComponent,
+		LancamentoPesquisaComponent
+	],
+	imports: [
+		CommonModule,
+		BrowserAnimationsModule,
+		InputTextModule,
+		ButtonModule,
+		TableModule,
+		TooltipModule,
+		FormsModule,
+		CalendarModule,
+		SelectButtonModule,
+		DropdownModule,
+		InputNumberModule,
+		FormsModule,
+		MessageModule,
+		HttpClientModule
+	],
+	exports: [
+		LancamentoCadastroComponent,
+		LancamentoPesquisaComponent
+	]
 })
 export class LancamentosModule { }
