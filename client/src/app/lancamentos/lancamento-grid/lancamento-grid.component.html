@@ -1,0 +1,49 @@
+<div class="grid">
+  <div class="col-12 p-fluid">
+    <p-table [value]="this.lancamentos" [lazy]="true" [responsive]="true" [paginator]="true" [rows]="this.itens"
+      [totalRecords]="this.totalElements" (onLazyLoad)="aoMudarDePagina($event)">
+      <!--  -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Pessoa</th>
+          <th>Descrição</th>
+          <th class="col-data-header">Vencimento</th>
+          <th class="col-data-header">Pagamento</th>
+          <th class="col-valor-header">Valor</th>
+          <th class="col-valor-header"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lancamento>
+        <tr>
+          <td>
+            <span class="p-column-title">Pessoa</span>
+            {{ lancamento.pessoa }}
+          </td>
+          <td>
+            <span class="p-column-title">Descrição</span>
+            {{ lancamento.descricao }}
+          </td>
+          <td class="col-data">
+            <span class="p-column-title">Vencimento</span>
+            {{ lancamento.dataVencimento | date:'dd/MM/yyyy' }}
+          </td>
+          <td class="col-data">
+            <span class="p-column-title">Pagamento</span>
+            {{ lancamento.dataPagamento | date:'dd/MM/yyyy'}}
+          </td>
+          <td class="col-valor-content">
+            <span class="p-column-title">Valor</span>
+            <span [ngStyle]="{color: lancamento.tipo == 'DESPESA' ? 'red'  : 'blue'}">
+              {{lancamento.valor | currency:'R$' }}
+            </span>
+          </td>
+          <td class="col-acoes">
+            <span class="p-column-title">Editar/Excluir</span>
+            <a pButton pTooltip="Editar" tooltipPosition="top" icon="pi pi-pencil"></a>
+            <button pButton pTooltip="Excluir" tooltipPosition="top" icon="pi pi-trash"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
