@@ -1,0 +1,67 @@
+<div class="toda-table">
+	<div class="grid">
+
+		<div class="col-12">
+			<h1>Pessoas</h1>
+		</div>
+
+		<div class="col-12 p-fluid">
+			<label>Nome</label>
+			<input pInputText type="text">
+		</div>
+
+		<div class="col-12">
+			<button pButton type="submit">Pesquisar</button>
+		</div>
+	</div>
+
+	<div class="grid">
+		<div class="col-12 p-fluid">
+			<p-table [value]="pessoas" [paginator]="true" [rows]="2" [responsive]="true">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Nome</th>
+						<th>Cidade</th>
+						<th class="col-data-header">Estado</th>
+						<th class="col-data-header">Status</th>
+						<th class="col-valor-header"></th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-pessoa let-i="index">
+					<tr>
+						<td>
+							<span class="p-column-title">Nome</span>
+							{{ pessoa.nome }}
+						</td>
+						<td>
+							<span class="p-column-title">Cidade</span>
+							{{ pessoa.cidade }}
+						</td>
+						<td class="col-data">
+							<span class="p-column-title">Estado</span>
+							{{ pessoa.estado }}
+						</td>
+						<td class="col-data">
+							<span class="p-column-title">Status</span>
+							{{ pessoa.ativo }}
+						</td>
+						<td class="col-acoes">
+							<span class="p-column-title">Editar/Excluir</span>
+							<a pButton pTooltip="Editar" tooltipPosition="top" icon="pi pi-pencil"></a>
+
+							<app-openclose-button (clicado)="toggleAtivo(i)" tooltipPosition="bottom"
+								[pTooltip]="pessoa.ativo ? 'Desativar' : 'Ativar'" [isOpen]="!pessoa.ativo"
+								activeIcon="pi pi-check" inactiveIcon="pi pi-times">
+							</app-openclose-button>
+
+							<button pButton pTooltip="Excluir" tooltipPosition="top" icon="pi pi-trash"></button>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	</div>
+	<div class="col-12">
+		<a pButton href="">Novo lançamento</a>
+	</div>
+</div>
