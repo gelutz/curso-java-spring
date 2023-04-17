@@ -20,6 +20,8 @@ public class LancamentoFilter {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate pagamentoAte;
 
+	private boolean ativo;
+
 	public String getDescricao() {
 		return this.descricao;
 	}
@@ -58,6 +60,22 @@ public class LancamentoFilter {
 
 	public void setpagamentoAte(LocalDate pagamentoAte) {
 		this.pagamentoAte = pagamentoAte;
+	}
+
+	public LocalDate getPagamentoAte() {
+		return pagamentoAte;
+	}
+
+	public void setPagamentoAte(LocalDate pagamentoAte) {
+		this.pagamentoAte = pagamentoAte;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 }

@@ -83,13 +83,12 @@ public class LancamentoService {
 		Lancamento novoLancamento = new Lancamento();
 		Categoria categoriaLancamento = new Categoria();
 
-		Pessoa requestPessoa = dados.getPessoaId();
-		if (ObjectUtils.isEmpty(requestPessoa)) {
+		if (ObjectUtils.isEmpty(dados.getPessoaId())) {
 			throw new BadRequestException(
 					messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale()));
 		}
 
-		Pessoa pessoaLancamento = pessoaServices.buscarSeExisteEAtivo(requestPessoa.getId());
+		Pessoa pessoaLancamento = pessoaServices.buscarPorId(dados.getPessoaId().getId());
 		if (pessoaLancamento == null || !pessoaLancamento.isAtivo()) {
 			throw new NotFoundException(this.NotFoundMessage());
 		}
@@ -104,6 +103,22 @@ public class LancamentoService {
 		novoLancamento.setCategoriaId(categoriaLancamento);
 
 		return lancamentoRepository.save(novoLancamento);
+	}
+
+	public Lancamento atualizar(Long id, Lancamento lancamento) {
+		Optional<Lancamento> objectLancamento = lancamentoRepository.findById(id);
+
+		if (objectLancamento.isEmpty()) {
+			return null;
+		}
+
+		Lancamento lancamentoSalvo = objectLancamento.get();
+		Long oldId = lancamentoSalvo.getId();
+
+		BeanUtils.copyProperties(lancamento, lancamentoSalvo);
+		lancamentoSalvo.setId(oldId);
+
+		return lancamentoRepository.save(lancamentoSalvo);
 	}
 
 	public void remover(Long id) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,6 +52,14 @@ public class LancamentoResource {
 		return ResponseEntity.ok(lancamentos);
 	}
 
+	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+	public ResponseEntity<Lancamento> buscarPorId(@PathVariable Long id) {
+		Lancamento lancamento = lancamentoService.buscarPorId(id);
+
+		return ResponseEntity.ok(lancamento);
+	}
+
 	@GetMapping("/tipos")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
 	public ResponseEntity<List<TipoLancamento>> buscarTipos() {
@@ -70,24 +79,26 @@ public class LancamentoResource {
 		return ResponseEntity.ok(lancamento);
 	}
 
-	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
-	public ResponseEntity<Lancamento> buscarPorId(@PathVariable Long id) {
-		Lancamento lancamento = lancamentoService.buscarPorId(id);
-
-		return ResponseEntity.ok(lancamento);
-	}
-
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> criarLancamento(@Valid @RequestBody Lancamento lancamento,
 			HttpServletResponse response) {
+		System.out.println(lancamento.toString());
 		Lancamento novoLancamento = lancamentoService.criar(lancamento);
 
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, novoLancamento.getId()));
 
 		return ResponseEntity.ok(novoLancamento);
+	}
+
+	@PutMapping("/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
+	public ResponseEntity<Lancamento> atualizar(@PathVariable Long id, @Valid @RequestBody Lancamento lancamento) {
+		Lancamento lancamentoAtualizado = lancamentoService.atualizar(id, lancamento);
+
+		return ResponseEntity.ok(lancamentoAtualizado);
 	}
 
 	@DeleteMapping("/{id}")

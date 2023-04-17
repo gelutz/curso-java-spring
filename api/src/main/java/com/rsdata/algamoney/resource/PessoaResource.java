@@ -51,6 +51,14 @@ public class PessoaResource {
 		return ResponseEntity.ok(pessoas);
 	}
 
+	@GetMapping("/ativos")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
+	public ResponseEntity<Page<Pessoa>> pesquisarAtivos(PessoaFilter filter, Pageable pageable) {
+		Page<Pessoa> pessoas = pessoaRepository.filtrar(filter, pageable);
+		pessoas.map((p) -> p.isAtivo());
+		return ResponseEntity.ok(pessoas);
+	}
+
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
 	public ResponseEntity<Pessoa> buscarPorId(@PathVariable Long id) {
@@ -95,8 +103,6 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	// @PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Object> atualizarAtivo(@PathVariable Long id, @Valid @RequestBody boolean ativo) {
-		System.out.println("-x-x-x-");
-		System.out.println("id:" + id + "ativo:" + ativo);
 		Pessoa pessoa = pessoaServices.buscarPorId(id);
 
 		if (pessoa == null) {
