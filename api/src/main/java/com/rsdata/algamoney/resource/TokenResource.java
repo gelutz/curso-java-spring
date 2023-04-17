@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rsdata.algamoney.config.ApiProperties;
+import com.rsdata.algamoney.config.property.ApiProperty;
 
 @RestController
 @RequestMapping("/tokens")
 public class TokenResource {
 
 	@Autowired
-	private ApiProperties apiProperties;
+	private ApiProperty apiProperties;
 
 	@DeleteMapping("/revoke")
 	public void revoke(HttpServletRequest request, HttpServletResponse response) {

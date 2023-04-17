@@ -91,29 +91,49 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		query.setMaxResults(totalPorPagina);
 	}
 
-	private Predicate[] criarRestricoes(LancamentoFilter filter, CriteriaBuilder builder, Root root) {
+	private Predicate[] criarRestricoes(LancamentoFilter filter, CriteriaBuilder builder, Root<Lancamento> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (!StringUtils.isEmpty(filter.getDescricao())) {
-			predicates.add(
-					builder.like(
-							builder.lower(root.get(Lancamento_.descricao)),
-							"%" + filter.getDescricao().toLowerCase() + "%"));
-
-		}
-
-		if (filter.getDataVencimentoDe() != null) {
-			predicates.add(
-					builder.like(
-							builder.lower(root.get(Lancamento_.dataVencimento)), filter.getDataVencimentoDe()));
-		}
-
-		if (filter.getDataVencimentoAte() != null) {
-			predicates.add(
-					builder.like(
-							builder.lower(root.get(Lancamento_.dataVencimento)), filter.getDataVencimentoAte()));
-		}
+		addPredicatesDeDescricao(predicates, filter, builder, root);
+		addPredicatesDeData(predicates, filter, builder, root);
 
 		return predicates.toArray(new Predicate[predicates.size()]);
+	}
+
+	private void addPredicatesDeDescricao(List<Predicate> predicates, LancamentoFilter filter,
+			CriteriaBuilder builder, Root<Lancamento> root) {
+
+		if (!StringUtils.isEmpty(filter.getDescricao())) {
+			predicates.add(builder.like(
+					builder.lower(root.get(Lancamento_.descricao)),
+					"%" + filter.getDescricao().toLowerCase() + "%"));
+		}
+	}
+
+	private void addPredicatesDeData(List<Predicate> predicates, LancamentoFilter filter,
+			CriteriaBuilder builder, Root<Lancamento> root) {
+
+		// caso haja vencimentoDe e vencimentoAte = faz um between
+		if (filter.getVencimentoDe() != null && filter.getVencimentoAte() != null) {
+			predicates.add(
+					builder.between(
+							root.get(Lancamento_.dataVencimento),
+							filter.getVencimentoDe(),
+							filter.getVencimentoAte()));
+		}
+
+		// caso contrário, só vê uma data maior que o vencimentoDe
+		// ou menor que o vencimentoAte
+		if (filter.getVencimentoDe() != null) {
+			predicates.add(
+					builder.greaterThanOrEqualTo(
+							root.get(Lancamento_.dataVencimento), filter.getVencimentoDe()));
+		}
+
+		if (filter.getVencimentoAte() != null) {
+			predicates.add(
+					builder.lessThanOrEqualTo(
+							root.get(Lancamento_.dataVencimento), filter.getVencimentoAte()));
+		}
 	}
 }

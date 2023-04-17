@@ -2,8 +2,6 @@ package com.rsdata.algamoney.model;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +29,6 @@ public class Pessoa {
 	@Embedded
 	private Endereco endereco;
 
-	@JsonIgnore
 	@Transient
 	public boolean isAtivo() {
 		return this.ativo;

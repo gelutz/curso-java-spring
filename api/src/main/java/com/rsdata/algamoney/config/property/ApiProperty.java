@@ -1,11 +1,11 @@
-package com.rsdata.algamoney.config;
+package com.rsdata.algamoney.config.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(value = "lutz-security")
-public class ApiProperties {
+public class ApiProperty {
 
-	private final String origemPermitida = "http://localhost";
+	private final String origemPermitida = "http://localhost:4200";
 	private final Seguranca seguranca = new Seguranca();
 
 	public String getOrigemPermitida() {

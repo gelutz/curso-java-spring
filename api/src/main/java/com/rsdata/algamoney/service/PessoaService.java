@@ -45,6 +45,13 @@ public class PessoaService {
 		return pessoaRepository.save(pessoaSalva);
 	}
 
+	public Pessoa atualizarAtivo(Long id, boolean ativo) {
+		Pessoa objectPessoa = pessoaRepository.findById(id).get();
+		objectPessoa.setAtivo(ativo);
+
+		return pessoaRepository.saveAndFlush(objectPessoa);
+	}
+
 	public Pessoa atualizarEndereco(Long id, Endereco dados) {
 		Optional<Pessoa> objectPessoa = pessoaRepository.findById(id);
 
@@ -62,27 +69,5 @@ public class PessoaService {
 		pessoa.setEndereco(endereco);
 
 		return pessoaRepository.save(pessoa);
-	}
-
-	public Pessoa atualizarAtivo(Long id, boolean ativo) {
-		Optional<Pessoa> objectPessoa = pessoaRepository.findById(id);
-
-		if (objectPessoa.isEmpty()) {
-			return null;
-		}
-
-		Pessoa pessoa = objectPessoa.get();
-		pessoa.setAtivo(ativo);
-		pessoaRepository.save(pessoa);
-
-		return pessoa;
-	}
-
-	public Pessoa reativarPessoa(Long id) {
-		return atualizarAtivo(id, true);
-	}
-
-	public Pessoa desativarPessoa(Long id) {
-		return atualizarAtivo(id, false);
 	}
 }

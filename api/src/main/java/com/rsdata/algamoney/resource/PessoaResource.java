@@ -1,7 +1,5 @@
 package com.rsdata.algamoney.resource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +26,7 @@ import com.rsdata.algamoney.event.RecursoCriadoEvent;
 import com.rsdata.algamoney.model.Endereco;
 import com.rsdata.algamoney.model.Pessoa;
 import com.rsdata.algamoney.repository.PessoaRepository;
+import com.rsdata.algamoney.repository.filter.PessoaFilter;
 import com.rsdata.algamoney.service.PessoaService;
 
 @RestController
@@ -44,16 +45,10 @@ public class PessoaResource {
 	// [GET]
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
-	public List<Pessoa> listar() {
-		List<Pessoa> todasPessoas = pessoaRepository.findAll();
-		List<Pessoa> pessoasAtivas = new ArrayList<Pessoa>();
-		for (Pessoa pessoa : todasPessoas) {
-			if (pessoa.getAtivo()) {
-				pessoasAtivas.add(pessoa);
-			}
-		}
+	public ResponseEntity<Page<Pessoa>> pesquisar(PessoaFilter filter, Pageable pageable) {
+		Page<Pessoa> pessoas = pessoaRepository.filtrar(filter, pageable);
 
-		return pessoasAtivas;
+		return ResponseEntity.ok(pessoas);
 	}
 
 	@GetMapping("/{id}")
@@ -80,19 +75,6 @@ public class PessoaResource {
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(novaPessoa);
 	}
-
-	@PostMapping("/{id}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
-	public ResponseEntity<?> reativarPessoa(@PathVariable Long id) {
-		Pessoa pessoaAtualizada = pessoaServices.reativarPessoa(id);
-
-		if (pessoaAtualizada == null) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(pessoaAtualizada);
-	}
 	// [/POST]
 
 	// [PUT]
@@ -110,15 +92,19 @@ public class PessoaResource {
 	}
 
 	@PutMapping("/{id}/ativo")
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	// @PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Object> atualizarAtivo(@PathVariable Long id, @Valid @RequestBody boolean ativo) {
-		Pessoa pessoa = ativo
-				? pessoaServices.reativarPessoa(id)
-				: pessoaServices.desativarPessoa(id);
+		System.out.println("-x-x-x-");
+		System.out.println("id:" + id + "ativo:" + ativo);
+		Pessoa pessoa = pessoaServices.buscarPorId(id);
 
 		if (pessoa == null) {
 			return ResponseEntity.notFound().build();
 		}
+
+		pessoa.setAtivo(ativo);
+		pessoaServices.atualizar(id, pessoa);
 
 		return ResponseEntity.ok(pessoa);
 	}
@@ -140,7 +126,7 @@ public class PessoaResource {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA')")
-	public ResponseEntity<Object> desativarPessoa(@PathVariable Long id) {
+	public ResponseEntity<Object> excluirPessoa(@PathVariable Long id) {
 		Optional<Pessoa> object = pessoaRepository.findById(id);
 
 		if (object.isEmpty()) {
@@ -148,12 +134,9 @@ public class PessoaResource {
 		}
 
 		Pessoa pessoa = object.get();
-		if (pessoa.isAtivo()) {
-			pessoa.setAtivo(false);
-			pessoaRepository.save(pessoa);
-		}
+		pessoaRepository.delete(pessoa);
 
-		return ResponseEntity.ok(pessoa);
+		return ResponseEntity.noContent().build();
 	}
 	// [/DELETE]
 

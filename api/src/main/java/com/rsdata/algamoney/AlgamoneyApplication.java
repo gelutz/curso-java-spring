@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import com.rsdata.algamoney.config.ApiProperties;
+import com.rsdata.algamoney.config.property.ApiProperty;
 
 @SpringBootApplication
-@EnableConfigurationProperties(value = ApiProperties.class)
+@EnableConfigurationProperties(value = ApiProperty.class)
 public class AlgamoneyApplication {
 
 	public static void main(String[] args) {

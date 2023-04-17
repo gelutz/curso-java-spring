@@ -10,8 +10,9 @@
 	</parent>
 	<groupId>com.rsdata</groupId>
 	<artifactId>algamoney</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>algamoney</name>
+	<packaging>jar</packaging>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 	

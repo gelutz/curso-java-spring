@@ -1,5 +1,8 @@
 package com.rsdata.algamoney.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rsdata.algamoney.event.RecursoCriadoEvent;
 import com.rsdata.algamoney.model.Lancamento;
+import com.rsdata.algamoney.model.TipoLancamento;
 import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
 import com.rsdata.algamoney.repository.projection.ResumoLancamento;
@@ -29,6 +33,7 @@ import com.rsdata.algamoney.service.LancamentoService;
 @RestController
 @RequestMapping("/lancamentos")
 public class LancamentoResource {
+
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
@@ -44,6 +49,17 @@ public class LancamentoResource {
 		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, pageable);
 
 		return ResponseEntity.ok(lancamentos);
+	}
+
+	@GetMapping("/tipos")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+	public ResponseEntity<List<TipoLancamento>> buscarTipos() {
+		List<TipoLancamento> tipos = new ArrayList<TipoLancamento>();
+
+		tipos.add(TipoLancamento.RECEITA);
+		tipos.add(TipoLancamento.DESPESA);
+
+		return ResponseEntity.ok(tipos);
 	}
 
 	@GetMapping(params = "resumo")
