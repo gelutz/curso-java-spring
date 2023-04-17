@@ -1,5 +1,5 @@
 export type Pageable<T = object> = {
-	content: T[]
+	content: T
 	pageable: object
 	empty: boolean
 	first: boolean
