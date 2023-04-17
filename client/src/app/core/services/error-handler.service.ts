@@ -18,6 +18,7 @@ export class ErrorHandlerService {
 		if (error instanceof Error) {
 			this.message = error.message
 			console.log(`ERROR: ${error.name} => ${error.message}`)
+			console.error(error.stack)
 		}
 
 		if (error instanceof HttpErrorResponse) {
@@ -27,6 +28,7 @@ export class ErrorHandlerService {
 			}
 
 			if (`${error.status}`.startsWith('4')) {
+				console.log(error)
 				this.message = error.error.message
 			}
 

@@ -1,5 +1,5 @@
 <div class="container">
-  <form class="toda-table" #form="ngForm" (ngSubmit)="salvar(form)">
+  <form class="toda-table" #form="ngForm" (ngSubmit)="(this.lancamento.id === null) ? salvar(form) : atualizar(form)">
     <div class="grid">
       <div class="col-12">
         <h1>Novo Lançamento</h1>
@@ -8,21 +8,25 @@
 
     <div class="col-12">
       <label for="tipo">Tipo de lançamento</label>
-      <p-selectButton [(ngModel)]="lancamento.tipo" name="tipo" [options]="tipos ?? []" #tipo></p-selectButton>
-
+      <p-selectButton required [(ngModel)]="this.tipoSelecionado" name="tipo" [options]="tipos ?? []"
+        #tipo="ngModel"></p-selectButton>
+      <app-mensagem-erro [control]="tipo" mensagem="Necessário escolher algum valor!"
+        erro="required"></app-mensagem-erro>
     </div>
 
     <div class="p-fluid block md:flex">
       <div class="col-12 md:col-6 p-fluid">
         <label for="">Vencimento</label>
-        <p-calendar name="vencimento" [(ngModel)]="lancamento.vencimento" #vencimento="ngModel"
+        <p-calendar name="vencimento" [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel"
           [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"
           [required]="true"></p-calendar>
       </div>
       <div class="col-12 md:col-6 p-fluid">
         <label for="">{{ tipo.value == 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
-        <p-calendar [(ngModel)]="lancamento.recebimento" name="recebimento" #recebe="ngModel" [dateFormat]="'dd/mm/yy'"
-          [showIcon]="true" [readonlyInput]="true" [inline]="false" [required]="true"></p-calendar>
+        <p-calendar [(ngModel)]="lancamento.dataPagamento" name="recebimento" #recebe="ngModel"
+          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"
+          [required]="true"></p-calendar>
+        <app-mensagem-erro></app-mensagem-erro>
         <p-message severity="error" text="Necessário selecionar uma data de recebimento/pagamento!"
           *ngIf="recebe.touched && recebe.invalid"></p-message>
       </div>
@@ -33,29 +37,29 @@
         <input name="descricao" [(ngModel)]="lancamento.descricao" #descricao="ngModel" pInputText type="text" required
           minlength="10">
 
-        <!-- <app-mensagem-erro [control]="descricao" [dirty]="true"
-					mensagem="Necessário preencher uma pequena descrição!" erro="required"></app-mensagem-erro>
-				<app-mensagem-erro [control]="descricao"
-					mensagem="O campo deve ter no mínimo {{ descricao.errors?.['minlength']?.requiredLength }} caracteres!"
-					erro="minlength"></app-mensagem-erro> -->
+        <app-mensagem-erro [control]="descricao" [dirty]="true" mensagem="Necessário preencher uma pequena descrição!"
+          erro="required"></app-mensagem-erro>
+        <app-mensagem-erro [control]="descricao"
+          mensagem="O campo deve ter no mínimo {{ descricao.errors?.['minlength']?.requiredLength }} caracteres!"
+          erro="minlength"></app-mensagem-erro>
       </div>
       <div class="col-12 md:col-6 p-fluid ">
         <label class="block" for="">Valor</label>
         <p-inputNumber name="valor" [(ngModel)]="lancamento.valor" #valor="ngModel" mode="currency" currency="BRL"
           placeholder="0,00" [required]="true"></p-inputNumber>
-        <!-- <app-mensagem-erro [control]="valor" mensagem="Necessário preencher o valor!"
-					erro="required"></app-mensagem-erro> -->
+        <app-mensagem-erro [control]="valor" mensagem="Necessário preencher o valor!"
+          erro="required"></app-mensagem-erro>
 
       </div>
     </div>
     <div class="p-fluid block md:flex">
       <div class="col-12 md:col-6 p-fluid ">
         <label class="block" for="">Categoria</label>
-        <p-dropdown [(ngModel)]="lancamento.categoria" name="categoria" [options]="categorias ?? []"></p-dropdown>
+        <p-dropdown [(ngModel)]="categoriaSelecionada" name="categoria" [options]="categorias ?? []"></p-dropdown>
       </div>
       <div class="col-12 md:col-6 p-fluid ">
         <label class="block" for="">Pessoa</label>
-        <p-dropdown [(ngModel)]="lancamento.pessoa" name="pessoa" [options]="pessoas ?? []"></p-dropdown>
+        <p-dropdown [(ngModel)]="pessoaSelecionada" name="pessoa" [options]="pessoas ?? []"></p-dropdown>
       </div>
     </div>
     <div class="col-12 p-fluid ">
@@ -64,8 +68,7 @@
     </div>
     <div class="col-12">
       <button class="end-buttons" pButton type="submit">Salvar</button>
-      <button class="end-buttons" pButton type="button">Novo</button>
-      <a class="end-buttons" href="javascript:;">Voltar para a pesquisa</a>
+      <button class="end-buttons" pButton routerLink="/lancamentos">Voltar para a pesquisa</button>
     </div>
   </form>
 </div>

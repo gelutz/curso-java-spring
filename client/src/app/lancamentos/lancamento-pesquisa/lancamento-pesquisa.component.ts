@@ -4,7 +4,7 @@ import { Table } from 'primeng/table';
 import { Pageable } from 'src/app/@types/Pageable';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { formatDateToISO } from 'src/app/core/utils/DateFormatter';
-import { LancamentoDTO } from '../@types/LancamentoDTO';
+import { LancamentoDTO } from '../../@types/LancamentoDTO';
 import { LancamentoService } from '../lancamento.service';
 
 
@@ -23,7 +23,7 @@ export class LancamentoPesquisaComponent {
 	descricao = ""
 	vencimentoDe?: Date
 	vencimentoAte?: Date
-	response: Pageable<LancamentoDTO> = {} as Pageable<LancamentoDTO>
+	response: Pageable<LancamentoDTO[]> = {} as Pageable<LancamentoDTO[]>
 
 	constructor(
 		private lancamentoService: LancamentoService,

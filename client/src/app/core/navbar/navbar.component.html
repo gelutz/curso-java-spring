@@ -1,20 +1,20 @@
 <div class="basic col-12 p-fluid">
-	<app-openclose-button activeIcon="pi pi-times" inactiveIcon="pi pi-bars"
-		(clicado)="toggleMenu()"></app-openclose-button>
+  <app-openclose-button activeIcon="pi pi-times" inactiveIcon="pi pi-bars"
+    (clicado)="toggleMenu()"></app-openclose-button>
 
 </div>
 <div [hidden]="!menuAberto">
-	<ul class="navbar-menu">
+  <ul class="navbar-menu">
 
-		<li class="item item-user">Bem vindo</li>
-		<li class="item">
-			<a href="">Lançamentos</a>
-		</li>
-		<li class="item">
-			<a href="">Pessoas</a>
-		</li>
-		<li class="item">
-			<a href="">Logout</a>
-		</li>
-	</ul>
+    <li class="item item-user">Bem vindo</li>
+    <li class="item" routerLinkActive="ativo" routerLink="/lancamentos">
+      <a>Lançamentos</a>
+    </li>
+    <li class="item" routerLinkActive="ativo" routerLink="/pessoas">
+      <a>Pessoas</a>
+    </li>
+    <li class="item">
+      <a href="">Logout</a>
+    </li>
+  </ul>
 </div>

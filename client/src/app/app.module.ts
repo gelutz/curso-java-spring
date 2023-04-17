@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { LancamentosModule } from './lancamentos/lancamentos.module';
 import { PessoasModule } from './pessoas/pessoas.module';
+import { Router } from './router';
 import { LogService } from './shared/log.service';
+
 
 
 @NgModule({
@@ -18,6 +21,7 @@ import { LogService } from './shared/log.service';
 		LancamentosModule,
 		PessoasModule,
 		CoreModule,
+		RouterModule.forRoot(Router)
 	],
 	providers: [
 		LogService,

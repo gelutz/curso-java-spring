@@ -73,13 +73,17 @@
             </td>
             <td class="col-acoes">
               <span class="p-column-title">Editar/Excluir</span>
-              <a class="edit-icon" pButton pTooltip="Editar" tooltipPosition="top" icon="pi pi-pencil"></a>
+              <a class="edit-icon" [routerLink]="['/lancamentos', lancamento.id]" pButton pTooltip="Editar"
+                tooltipPosition="top" icon="pi pi-pencil"></a>
               <button pButton pTooltip="Excluir" (click)="confirmarExclusao(lancamento.id)" tooltipPosition="top"
                 icon="pi pi-trash"></button>
             </td>
           </tr>
         </ng-template>
       </p-table>
+    </div>
+    <div class="col-12">
+      <button routerLink="/lancamentos/novo" class="end-buttons" pButton type="button">Novo</button>
     </div>
   </div>
 </div>

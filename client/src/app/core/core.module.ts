@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -20,6 +21,7 @@ const declarations = [
 		CommonModule,
 		ToastModule,
 		ConfirmDialogModule,
+		RouterModule
 	],
 	providers: [
 		MessageService,

@@ -3,7 +3,7 @@ import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api'
 import { Table } from 'primeng/table';
 import { Pageable } from 'src/app/@types/Pageable';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
-import { PessoaDTO } from '../@types/PessoaDTO';
+import { PessoaDTO } from '../../@types/PessoaDTO';
 import { PessoaService } from '../pessoa.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class PessoaPesquisaComponent {
 	ITENS_POR_PAGINA = 5
 
 	nome = ""
-	response: Pageable<PessoaDTO> = {} as Pageable<PessoaDTO>
+	response: Pageable<PessoaDTO[]> = {} as Pageable<PessoaDTO[]>
 	pessoa!: PessoaDTO[]
 
 
@@ -29,7 +29,7 @@ export class PessoaPesquisaComponent {
 		private errorHandler: ErrorHandlerService
 	) { }
 	async pesquisar(pagina = 0): Promise<void> {
-		this.pessoa = await this.pessoaService.pesquisar({
+		this.response = await this.pessoaService.pesquisar({
 			itensPorPagina: this.ITENS_POR_PAGINA,
 			pagina,
 			nome: this.nome,

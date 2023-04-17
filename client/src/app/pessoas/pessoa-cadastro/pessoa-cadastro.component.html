@@ -1,71 +1,64 @@
 <div class="container">
-	<form class="toda-table" #form="ngForm" (ngSubmit)="salvar(form)" [name]="'form-pessoa'">
-		<div class="grid">
-			<div class="col-12">
-				<h1>Nova Pessoa</h1>
-			</div>
-		</div>
+  <form class="toda-table" #form="ngForm" (ngSubmit)="salvar(form)" [name]="'form-pessoa'">
+    <div class="grid">
+      <div class="col-12">
+        <h1>Nova Pessoa</h1>
+      </div>
+    </div>
 
-		<div class="p-fluid block md:flex">
-			<div class="p-fluid col-12">
-				<label for="nome">Nome</label>
-				<input pInputText name="nome" #nome="ngModel" [(ngModel)]="pessoa.nome" maxlength="100" minlength="5"
-					required type="text">
-				<app-mensagem-erro [control]="nome" [touched]="true" mensagem="Campo obrigatório!"
-					erro="required"></app-mensagem-erro>
-				<app-mensagem-erro [control]="nome" [dirty]="true"
-					mensagem="O campo deve ter no mínimo {{ nome.errors?.['minlength']?.requiredLength }} caracteres!"
-					erro="minlength"></app-mensagem-erro>
-			</div>
-		</div>
-		<div class="p-fluid block md:flex">
-			<div class="p-fluid col-9">
-				<label for="logradouro">Logradouro</label>
-				<input pInputText name="logradouro" #logradouro="ngModel" [(ngModel)]="pessoa.logradouro"
-					maxLength="130" required type="text">
-				<app-mensagem-erro [control]="logradouro" [touched]="true" mensagem="Campo obrigatório!"
-					erro="required"></app-mensagem-erro>
-			</div>
-			<div class="p-fluid col-3">
-				<label for="logradouro">Telefone</label>
-				<p-inputMask #telefone="ngModel" name="telefone" [(ngModel)]="pessoa.telefone" [required]="true"
-					mask="(99)99999-9999"></p-inputMask>
-				<app-mensagem-erro [control]="telefone" [touched]="true" mensagem="Campo obrigatório!"
-					erro="required"></app-mensagem-erro>
-			</div>
-		</div>
-		<div class="p-fluid block md:flex">
-			<div class="col-4 p-fluid">
-				<label class="block" for="">Complemento</label>
-				<input pInputText #complemento="ngModel" [(ngModel)]="pessoa.complemento" name="complemento"
-					minlength="5" type="text">
-				<app-mensagem-erro [control]="complemento" [dirty]="true"
-					mensagem="O campo deve ter no mínimo {{ complemento.errors?.['minlength']?.requiredLength }} caracteres!"
-					erro="minlength"></app-mensagem-erro>
-			</div>
-			<div class="col-4 p-fluid ">
-				<label class="block" for="">Bairro</label>
-				<input pInputText #bairro="ngModel" [(ngModel)]="pessoa.bairro" name="bairro" required type="text">
-				<app-mensagem-erro [control]="bairro" [touched]="true" mensagem="Campo obrigatório!"
-					erro="required"></app-mensagem-erro>
-			</div>
-			<div class="col-4 p-fluid ">
-				<label class="block" for="">CEP</label>
-				<p-inputMask #cep="ngModel" [(ngModel)]="pessoa.cep" name="cep" [required]="true" mask="99.999-999"
-					type="text"></p-inputMask>
-				<app-mensagem-erro [control]="cep" [touched]="true" mensagem="Campo obrigatório!"
-					erro="required"></app-mensagem-erro>
-			</div>
-		</div>
+    <div class="p-fluid block md:flex">
+      <div class="p-fluid col-12">
+        <label for="nome">Nome</label>
+        <input pInputText name="nome" #nome="ngModel" [(ngModel)]="pessoa.nome" maxlength="100" minlength="5" required
+          type="text">
+        <app-mensagem-erro [control]="nome" [touched]="true" mensagem="Campo obrigatório!"
+          erro="required"></app-mensagem-erro>
+        <app-mensagem-erro [control]="nome" [dirty]="true"
+          mensagem="O campo deve ter no mínimo {{ nome.errors?.['minlength']?.requiredLength }} caracteres!"
+          erro="minlength"></app-mensagem-erro>
+      </div>
+    </div>
 
-		<div class="col-12 p-fluid ">
-			<label class="block" for="">Observação</label>
-			<textarea pInputText rows="3"></textarea>
-		</div>
-		<div class="col-12">
-			<button class="end-buttons" pButton type="submit">Salvar</button>
-			<button class="end-buttons" pButton type="button">Novo</button>
-			<a class="end-buttons" href="javascript:;">Voltar para a pesquisa</a>
-		</div>
-	</form>
+    <div class="p-fluid block md:flex">
+      <div class="p-fluid col-9">
+        <label for="logradouro">Logradouro</label>
+        <input pInputText name="logradouro" #logradouro="ngModel" [(ngModel)]="pessoa.endereco!.logradouro"
+          maxLength="130" required type="text">
+        <app-mensagem-erro [control]="logradouro" [touched]="true" mensagem="Campo obrigatório!"
+          erro="required"></app-mensagem-erro>
+      </div>
+      <div class="col-3 p-fluid ">
+        <label class="block" for="">CEP</label>
+        <p-inputMask #cep="ngModel" [(ngModel)]="pessoa.endereco!.cep" name="cep" [required]="true" mask="99.999-999"
+          type="text"></p-inputMask>
+        <app-mensagem-erro [control]="cep" [touched]="true" mensagem="Campo obrigatório!"
+          erro="required"></app-mensagem-erro>
+      </div>
+
+    </div>
+
+    <div class="p-fluid md:flex">
+      <div class="col-6 p-fluid">
+        <label class="block" for="">Complemento</label>
+        <input pInputText #complemento="ngModel" [(ngModel)]="pessoa.endereco!.complemento" name="complemento"
+          minlength="5" type="text">
+        <app-mensagem-erro [control]="complemento" [dirty]="true"
+          mensagem="O campo deve ter no mínimo {{ complemento.errors?.['minlength']?.requiredLength }} caracteres!"
+          erro="minlength"></app-mensagem-erro>
+      </div>
+
+      <div class="col-6 p-fluid ">
+        <label class="block" for="">Bairro</label>
+        <input pInputText #bairro="ngModel" [(ngModel)]="pessoa.endereco!.bairro" name="bairro" required type="text">
+        <app-mensagem-erro [control]="bairro" [touched]="true" mensagem="Campo obrigatório!"
+          erro="required"></app-mensagem-erro>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <button class="end-buttons" pButton type="submit">Salvar</button>
+      <a class="end-buttons" pButton routerLink="/pessoas/novo">Novo</a>
+      <a class="end-buttons" href="javascript:;">Voltar para a pesquisa</a>
+    </div>
+  </form>
 </div>

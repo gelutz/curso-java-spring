@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { LancamentoDTO } from '../@types/LancamentoDTO';
+import { LancamentoFiltro } from '../@types/LancamentoFiltro';
 import { Pageable } from '../@types/Pageable';
-import { LancamentoDTO } from './@types/LancamentoDTO';
-import { LancamentoFiltro } from './@types/LancamentoFiltro';
-import { TipoLancamentoDTO } from './@types/TipoLancamentoDTO';
+import { TipoLancamentoDTO } from '../@types/TipoLancamentoDTO';
 
 @Injectable({
 	providedIn: 'root'
@@ -31,7 +31,21 @@ export class LancamentoService {
 		})
 	}
 
-	pesquisar(filtro: LancamentoFiltro): Promise<Pageable<LancamentoDTO>> {
+	async buscarPorID(id: number): Promise<LancamentoDTO> {
+		const url = `${this.baseUrl}/${id}`
+		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
+
+		return new Promise((resolve, reject) => {
+			const returned = this.http.get<LancamentoDTO>(url, { headers })
+
+			returned.subscribe({
+				next: resolve,
+				error: reject
+			})
+		})
+	}
+
+	pesquisar(filtro: LancamentoFiltro): Promise<Pageable<LancamentoDTO[]>> {
 
 		const url = `${this.baseUrl}`
 		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
@@ -50,7 +64,39 @@ export class LancamentoService {
 			params = params.set('vencimentoAte', filtro.vencimentoAte ?? '')
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.get<Pageable<LancamentoDTO>>(url, { headers, params })
+			const returned = this.http.get<Pageable<LancamentoDTO[]>>(url, { headers, params })
+
+			returned.subscribe({
+				next: resolve,
+				error: reject
+			})
+		})
+	}
+
+	salvar(lancamento: LancamentoDTO): Promise<LancamentoDTO> {
+		const url = `${this.baseUrl}`
+		let headers = new HttpHeaders()
+		headers = headers.append('Authorization', `Basic ${environment.auth.basic}`)
+		headers = headers.append('Content-Type', `application/json`)
+
+		return new Promise((resolve, reject) => {
+			const returned = this.http.post<LancamentoDTO>(url, JSON.stringify(lancamento), { headers })
+
+			returned.subscribe({
+				next: resolve,
+				error: reject
+			})
+		})
+	}
+
+	atualizar(lancamento: LancamentoDTO): Promise<LancamentoDTO> {
+		const url = `${this.baseUrl}/${lancamento.id}`
+		let headers = new HttpHeaders()
+		headers = headers.append('Authorization', `Basic ${environment.auth.basic}`)
+		headers = headers.append('Content-Type', `application/json`)
+
+		return new Promise((resolve, reject) => {
+			const returned = this.http.put<LancamentoDTO>(url, JSON.stringify(lancamento), { headers })
 
 			returned.subscribe({
 				next: resolve,

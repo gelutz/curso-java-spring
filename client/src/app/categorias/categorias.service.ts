@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CategoriaDTO } from './@types/CategoriaDTO';
+import { CategoriaDTO } from '../@types/CategoriaDTO';
 
 
 @Injectable({
@@ -22,9 +22,7 @@ export class CategoriaService {
 			const returned = this.http.get<CategoriaDTO[]>(url, { headers })
 
 			returned.subscribe({
-				next: (categorias) => {
-					resolve(categorias)
-				},
+				next: resolve,
 				error: reject
 			})
 		})
