@@ -1,22 +1,80 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { Pageable } from 'src/app/@types/Pageable';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { PessoaDTO } from '../@types/PessoaDTO';
+import { PessoaService } from '../pessoa.service';
 
 @Component({
-  selector: 'app-pessoa-pesquisa',
-  templateUrl: './pessoa-pesquisa.component.html',
-  styleUrls: ['./pessoa-pesquisa.component.css']
+	selector: 'app-pessoa-pesquisa',
+	templateUrl: './pessoa-pesquisa.component.html',
+	styleUrls: ['./pessoa-pesquisa.component.css']
 })
 export class PessoaPesquisaComponent {
 
-  pessoas = [
-    { nome: 'Manoel Pinheiro', cidade: 'Uberlândia', estado: 'MG', ativo: true },
-    { nome: 'Sebastião da Silva', cidade: 'São Paulo', estado: 'SP', ativo: false },
-    { nome: 'Carla Souza', cidade: 'Florianópolis', estado: 'SC', ativo: true },
-    { nome: 'Luís Pereira', cidade: 'Curitiba', estado: 'PR', ativo: true },
-    { nome: 'Vilmar Andrade', cidade: 'Rio de Janeiro', estado: 'RJ', ativo: false },
-    { nome: 'Paula Maria', cidade: 'Uberlândia', estado: 'MG', ativo: true }
-  ];
+	@ViewChild(Table) private tabela!: Table;
 
-  toggleAtivo(index: number) {
-    this.pessoas[index].ativo = !this.pessoas[index].ativo
-  }
+	ITENS_POR_PAGINA = 5
+
+	nome = ""
+	response: Pageable<PessoaDTO> = {} as Pageable<PessoaDTO>
+	pessoa!: PessoaDTO[]
+
+
+	constructor(
+		private pessoaService: PessoaService,
+		private messageService: MessageService,
+		private confirmationService: ConfirmationService,
+		private errorHandler: ErrorHandlerService
+	) { }
+	async pesquisar(pagina = 0): Promise<void> {
+		this.pessoa = await this.pessoaService.pesquisar({
+			itensPorPagina: this.ITENS_POR_PAGINA,
+			pagina,
+			nome: this.nome,
+		})
+	}
+
+	aoMudarDePagina(event: LazyLoadEvent): void {
+		const pagina = (event.first ?? 0) / (event.rows ?? 1)
+		this.pesquisar(pagina)
+	}
+
+	async mudarAtivo(id: number, currentState: boolean): Promise<void> {
+		try {
+			await this.pessoaService.mudarAtivo(id, currentState)
+		} catch (e) {
+			this.errorHandler.handle(e);
+			return
+		}
+
+		this.tabela.reset()
+
+		this.messageService.add({
+			severity: 'success',
+			detail: `Pessoa ${currentState ? 'desativada' : 'ativada'} com sucesso!`
+		})
+	}
+
+	async excluir(id: number): Promise<void> {
+
+		try {
+			await this.pessoaService.excluir(id)
+		} catch (e) {
+			this.errorHandler.handle(e);
+			return
+		}
+
+		this.tabela.reset()
+
+		this.messageService.add({ severity: 'success', detail: 'Pessoa excluída com sucesso!' })
+	}
+
+	confirmarExclusao(id: number): void {
+		this.confirmationService.confirm({
+			message: 'Deseja excluir a Pessoa?',
+			accept: async () => await this.excluir(id)
+		})
+	}
 }

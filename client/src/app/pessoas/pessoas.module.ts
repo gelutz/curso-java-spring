@@ -18,28 +18,28 @@ import { PessoaPesquisaComponent } from './pessoa-pesquisa/pesquisa-pessoa.compo
 
 
 @NgModule({
-  declarations: [
-    PessoaPesquisaComponent,
-    PessoaCadastroComponent
-  ],
-  imports: [
-    CommonModule,
-    BrowserAnimationsModule,
-    InputTextModule,
-    ButtonModule,
-    TableModule,
-    TooltipModule,
-    FormsModule,
-    CalendarModule,
-    SelectButtonModule,
-    DropdownModule,
-    InputNumberModule,
-    InputMaskModule,
-    SharedModule
-  ],
-  exports: [
-    PessoaPesquisaComponent,
-    PessoaCadastroComponent
-  ]
+	declarations: [
+		PessoaPesquisaComponent,
+		PessoaCadastroComponent
+	],
+	imports: [
+		CommonModule,
+		BrowserAnimationsModule,
+		InputTextModule,
+		ButtonModule,
+		TableModule,
+		TooltipModule,
+		FormsModule,
+		CalendarModule,
+		SelectButtonModule,
+		DropdownModule,
+		InputNumberModule,
+		InputMaskModule,
+		SharedModule
+	],
+	exports: [
+		PessoaPesquisaComponent,
+		PessoaCadastroComponent
+	]
 })
 export class PessoasModule { }

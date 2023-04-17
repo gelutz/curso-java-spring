@@ -1,4 +1,4 @@
-export type ResponseDTO<T = object> = {
+export type Pageable<T = object> = {
 	content: T[]
 	pageable: object
 	empty: boolean

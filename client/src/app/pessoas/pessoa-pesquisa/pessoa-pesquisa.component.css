@@ -1,42 +1,41 @@
 @media (min-width: 960px) {
-	.container {
-		width: 930px;
-		margin: 0 auto;
-	}
+  .container {
+    width: 930px;
+    margin: 0 auto;
+  }
 }
 
 .label {
-	margin: 0.5em;
+  margin: 0.5em;
 }
 
 .toda-table {
-	padding: 2em;
-	margin-top: .5em;
+  padding: 2em;
+  margin-top: .5em;
 }
 
 .tabela-border {
-	border-left: 1px solid gray;
-	border-right: 1px solid gray;
-	border-radius: .4em;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  border-radius: .4em;
 }
 
 .col-valor-content {
-	text-align: right;
+  text-align: right;
 }
 
 .col-data-content {
-	text-align: center;
+  text-align: center;
 }
 
 .col-acoes {
-	text-align: center;
+  text-align: center;
 }
 
-.col-acoes a,
-app-openclose-button {
-	margin-right: .2em;
+.col-acoes a {
+  margin-right: .2em;
 }
 
 .tabela th {
-	font-weight: bold;
+  font-weight: bold;
 }

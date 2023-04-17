@@ -1,21 +1,40 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ResponseDTO } from '../@types/ResponseDTO';
+import { environment } from 'src/environments/environment';
+import { Pageable } from '../@types/Pageable';
 import { LancamentoDTO } from './@types/LancamentoDTO';
 import { LancamentoFiltro } from './@types/LancamentoFiltro';
+import { TipoLancamentoDTO } from './@types/TipoLancamentoDTO';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class LancamentoService {
 
-	baseUrl = 'http://localhost:8080'
+
+	baseUrl = `${environment.baseUrl}/lancamentos`
 	constructor(private http: HttpClient) { }
 
-	pesquisar(filtro: LancamentoFiltro): Promise<ResponseDTO<LancamentoDTO>> {
+	async buscarTipos(): Promise<TipoLancamentoDTO[]> {
+		const url = `${this.baseUrl}/tipos`
+		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
 
-		const url = `${this.baseUrl}/lancamentos`
-		const headers = (new HttpHeaders()).append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==')
+		return new Promise((resolve, reject) => {
+			const returned = this.http.get<TipoLancamentoDTO[]>(url, { headers })
+
+			returned.subscribe({
+				next: (tipos) => {
+					resolve(tipos)
+				},
+				error: reject
+			})
+		})
+	}
+
+	pesquisar(filtro: LancamentoFiltro): Promise<Pageable<LancamentoDTO>> {
+
+		const url = `${this.baseUrl}`
+		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
 
 		let params = new HttpParams()
 			.set('page', `${filtro.pagina}`)
@@ -31,10 +50,24 @@ export class LancamentoService {
 			params = params.set('vencimentoAte', filtro.vencimentoAte ?? '')
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.get<ResponseDTO<LancamentoDTO>>(url, { headers, params })
+			const returned = this.http.get<Pageable<LancamentoDTO>>(url, { headers, params })
 
 			returned.subscribe({
 				next: resolve,
+				error: reject
+			})
+		})
+	}
+
+	excluir(id: number): Promise<void> {
+		const url = `${this.baseUrl}/${id}`
+
+		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
+		return new Promise((resolve, reject) => {
+			const returned = this.http.delete<Pageable<LancamentoDTO>>(url, { headers })
+
+			returned.subscribe({
+				next: () => resolve(),
 				error: reject
 			})
 		})

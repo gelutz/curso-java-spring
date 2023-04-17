@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
-import { LazyLoadEvent } from 'primeng/api';
-import { ResponseDTO } from 'src/app/@types/ResponseDTO';
+import { Component, ViewChild } from '@angular/core';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { Pageable } from 'src/app/@types/Pageable';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { formatDateToISO } from 'src/app/core/utils/DateFormatter';
 import { LancamentoDTO } from '../@types/LancamentoDTO';
 import { LancamentoService } from '../lancamento.service';
+
 
 @Component({
 	selector: 'app-lancamento-pesquisa',
@@ -12,22 +15,55 @@ import { LancamentoService } from '../lancamento.service';
 })
 export class LancamentoPesquisaComponent {
 
+
+	@ViewChild(Table) private tabela!: Table;
+
 	ITENS_POR_PAGINA = 5
 
 	descricao = ""
 	vencimentoDe?: Date
 	vencimentoAte?: Date
-	response: ResponseDTO<LancamentoDTO> = {} as ResponseDTO<LancamentoDTO>
+	response: Pageable<LancamentoDTO> = {} as Pageable<LancamentoDTO>
 
-	constructor(private lancamentoService: LancamentoService) { }
+	constructor(
+		private lancamentoService: LancamentoService,
+		private messageService: MessageService,
+		private confirmationService: ConfirmationService,
+		private errorHandler: ErrorHandlerService
+	) { }
 
 	async pesquisar(pagina = 0): Promise<void> {
-		this.response = await this.lancamentoService.pesquisar({
-			itensPorPagina: this.ITENS_POR_PAGINA,
-			pagina,
-			descricao: this.descricao,
-			vencimentoDe: formatDateToISO(this.vencimentoDe),
-			vencimentoAte: formatDateToISO(this.vencimentoAte)
+		try {
+			this.response = await this.lancamentoService.pesquisar({
+				itensPorPagina: this.ITENS_POR_PAGINA,
+				pagina,
+				descricao: this.descricao,
+				vencimentoDe: formatDateToISO(this.vencimentoDe),
+				vencimentoAte: formatDateToISO(this.vencimentoAte)
+			})
+		} catch (e) {
+			this.errorHandler.handle(e);
+		}
+	}
+
+	async excluir(id: number): Promise<void> {
+
+		try {
+			await this.lancamentoService.excluir(id)
+		} catch (e) {
+			this.errorHandler.handle(e);
+			return
+		}
+
+		this.tabela.reset()
+
+		this.messageService.add({ severity: 'success', detail: 'Lançamento excluído com sucesso!' })
+	}
+
+	confirmarExclusao(id: number): void {
+		this.confirmationService.confirm({
+			message: 'Deseja excluir o lançamento?',
+			accept: async () => await this.excluir(id)
 		})
 	}
 

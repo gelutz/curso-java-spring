@@ -5,13 +5,25 @@
 
 html,
 body {
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-	font-size: 12px;
-	color: #1e1e1e;
-	margin: 0;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  color: #1e1e1e;
+  margin: 0;
 }
 
 .toda-table {
-	padding: 2em;
-	margin-top: .5em;
+  padding: 2em;
+  margin-top: .5em;
+}
+
+.col-valor-content {
+  text-align: right;
+}
+
+.col-data-content {
+  text-align: center;
+}
+
+.tabela th {
+  font-weight: bold;
 }

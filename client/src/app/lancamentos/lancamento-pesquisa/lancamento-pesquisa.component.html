@@ -23,14 +23,20 @@
         <button pButton type="submit">Pesquisar</button>
       </div>
     </div>
-
   </form>
+
   <div class="grid">
     <div class="col-12 p-fluid">
-      <p-table [value]="this.response.content" [lazy]="true" [responsive]="true" [paginator]="true"
+      <p-table #tabela [value]="this.response.content" [lazy]="true" [responsive]="true" [paginator]="true"
         [rows]="this.ITENS_POR_PAGINA" [totalRecords]="this.response.totalElements"
         (onLazyLoad)="aoMudarDePagina($event)">
-        <!--  -->
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6">
+              Nenhum lançamento encontrado
+            </td>
+          </tr>
+        </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th>Pessoa</th>
@@ -67,19 +73,13 @@
             </td>
             <td class="col-acoes">
               <span class="p-column-title">Editar/Excluir</span>
-              <a pButton pTooltip="Editar" tooltipPosition="top" icon="pi pi-pencil"></a>
-              <button pButton pTooltip="Excluir" tooltipPosition="top" icon="pi pi-trash"></button>
+              <a class="edit-icon" pButton pTooltip="Editar" tooltipPosition="top" icon="pi pi-pencil"></a>
+              <button pButton pTooltip="Excluir" (click)="confirmarExclusao(lancamento.id)" tooltipPosition="top"
+                icon="pi pi-trash"></button>
             </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
-  </div>
-
-  <!-- <app-lancamento-grid (aoPesquisar)="this.pesquisar" [lancamentos]="response.content"
-    [totalItens]="response.totalElements"></app-lancamento-grid> -->
-
-  <div class="col-12">
-    <a pButton href="">Novo lançamento</a>
   </div>
 </div>

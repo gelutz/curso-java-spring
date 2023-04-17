@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
@@ -11,16 +12,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
-import { LancamentoGridComponent } from './lancamento-grid/lancamento-grid.component';
 import { LancamentoPesquisaComponent } from './lancamento-pesquisa/lancamento-pesquisa.component';
 
 
 @NgModule({
 	declarations: [
 		LancamentoCadastroComponent,
-		LancamentoGridComponent,
 		LancamentoPesquisaComponent
 	],
 	imports: [
@@ -35,13 +35,16 @@ import { LancamentoPesquisaComponent } from './lancamento-pesquisa/lancamento-pe
 		SelectButtonModule,
 		DropdownModule,
 		InputNumberModule,
-		FormsModule,
 		MessageModule,
-		HttpClientModule
+		HttpClientModule,
+		ToastModule,
 	],
 	exports: [
 		LancamentoCadastroComponent,
 		LancamentoPesquisaComponent
+	],
+	providers: [
+		MessageService
 	]
 })
 export class LancamentosModule { }
