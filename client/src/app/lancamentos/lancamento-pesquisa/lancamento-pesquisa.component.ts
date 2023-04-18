@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
 import { Pageable } from 'src/app/@types/Pageable';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { formatDateToISO } from 'src/app/core/utils/DateFormatter';
@@ -15,10 +15,7 @@ import { LancamentoService } from '../lancamento.service';
 	styleUrls: ['./lancamento-pesquisa.component.css']
 })
 export class LancamentoPesquisaComponent {
-
-
-	@ViewChild(Table) private tabela!: Table;
-
+	id: string | number = 0
 	ITENS_POR_PAGINA = 5
 
 	descricao = ""
@@ -31,8 +28,15 @@ export class LancamentoPesquisaComponent {
 		private messageService: MessageService,
 		private confirmationService: ConfirmationService,
 		private errorHandler: ErrorHandlerService,
-		private router: Router
+		private route: ActivatedRoute,
+		private router: Router,
+		private title: Title
 	) { }
+
+	ngOnInit(): void {
+		this.id = this.route.snapshot.params['id'];
+		this.title.setTitle('Pesquisa/Lançamento')
+	}
 
 	async pesquisar(pagina = 0): Promise<void> {
 		try {

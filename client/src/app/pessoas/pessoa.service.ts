@@ -47,14 +47,11 @@ export class PessoaService {
 
 	async salvar(pessoa: PessoaDTO): Promise<PessoaDTO> {
 		const url = `${this.baseUrl}`
-		let headers = new HttpHeaders()
-		headers = headers.append('Authorization', `Basic ${environment.auth.basic}`)
-		headers = headers.append('Content-Type', `application/json`)
 
 		pessoa.ativo = true
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.post<PessoaDTO>(url, JSON.stringify(pessoa), { headers })
+			const returned = this.http.post<PessoaDTO>(url, JSON.stringify(pessoa))
 
 			returned.subscribe({
 				next: resolve,
@@ -65,11 +62,10 @@ export class PessoaService {
 
 	mudarAtivo(id: number, currentState: boolean): Promise<PessoaDTO> {
 		const url = `${this.baseUrl}/${id}/ativo`
-		this.headers.append('Content-Type', 'application/json')
 
 		console.log(!currentState, this.headers)
 		return new Promise((resolve, reject) => {
-			const returned = this.http.put<PessoaDTO>(url, !currentState, { headers: this.headers })
+			const returned = this.http.put<PessoaDTO>(url, !currentState)
 			returned.subscribe({
 				next: resolve,
 				error: reject
@@ -80,7 +76,7 @@ export class PessoaService {
 	excluir(id: number): Promise<void> {
 		const url = `${this.baseUrl}/${id}`
 		return new Promise((resolve, reject) => {
-			const returned = this.http.delete<PessoaDTO>(url, { headers: this.headers })
+			const returned = this.http.delete<PessoaDTO>(url)
 
 			returned.subscribe({
 				next: () => resolve(),

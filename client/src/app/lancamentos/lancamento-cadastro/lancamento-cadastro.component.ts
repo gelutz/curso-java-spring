@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { TipoLancamentoDTO } from 'src/app/@types/TipoLancamentoDTO';
 import { CategoriaService } from 'src/app/categorias/categorias.service';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { capitalize } from 'src/app/core/utils/Capitalize';
 import { formatISOToDate } from 'src/app/core/utils/DateFormatter';
 import { PessoaService } from 'src/app/pessoas/pessoa.service';
 import { LancamentoDTO } from '../../@types/LancamentoDTO';
-import { TipoLancamentoDTO } from '../../@types/TipoLancamentoDTO';
 import { LancamentoService } from '../lancamento.service';
 
 
@@ -44,7 +45,8 @@ export class LancamentoCadastroComponent {
 		private errorHandler: ErrorHandlerService,
 		private messageService: MessageService,
 		private route: ActivatedRoute,
-		private router: Router
+		private router: Router,
+		private title: Title
 	) {
 		try {
 			this.lancamentoService.buscarTipos().then(tipos => {
@@ -66,27 +68,42 @@ export class LancamentoCadastroComponent {
 
 	}
 
+
+
 	async ngOnInit(): Promise<void> { // TODO: throws ExpressionChangedAfterItHasBeenCheckedError, não pode ser async
-		this.id = this.route.snapshot.params['id']
+		this.id = this.route.snapshot.params['id'];
 
-		if (this.id && this.id !== 'novo') {
-			try {
-				console.log(this.id)
-				const lancamento = await this.lancamentoService.buscarPorID(this.id as number)
-
-				console.log(lancamento)
-				this.lancamento = lancamento
-				this.lancamento.dataVencimento = formatISOToDate(lancamento.dataVencimento)
-				this.lancamento.dataPagamento = formatISOToDate(lancamento.dataPagamento)
-				this.categoriaSelecionada = { id: lancamento.categoriaId?.id ?? 0 }
-				this.tipoSelecionado = capitalize(lancamento.tipo?.toLowerCase())
-				this.pessoaSelecionada = { id: lancamento.pessoaId?.id ?? 0 }
-			}
-			catch (error) {
-				this.errorHandler.handle(error)
-			}
+		if (this.isEdicao()) {
+			await this.carregarLancamentos();
 		}
 
+		this.atualizarTitulo()
+	}
+
+	atualizarTitulo(): void {
+		const title = `${this.isEdicao() ? 'Edição' : 'Cadastro'}/Lançamento`
+		this.title.setTitle(title)
+	}
+
+	// equivale a (this.id != undefined) && (this.id != 'novo')
+	// mas a expressão acima não funciona no TS
+	private isEdicao = (): boolean => !(!(this.id != undefined) || !(this.id != 'novo'))
+
+
+	private async carregarLancamentos(): Promise<void> {
+		try {
+			const lancamento = await this.lancamentoService.buscarPorID(this.id as number);
+
+			this.lancamento = lancamento;
+			this.lancamento.dataVencimento = formatISOToDate(lancamento.dataVencimento);
+			this.lancamento.dataPagamento = formatISOToDate(lancamento.dataPagamento);
+			this.categoriaSelecionada = { id: lancamento.categoriaId?.id ?? 0 };
+			this.tipoSelecionado = capitalize(lancamento.tipo?.toLowerCase());
+			this.pessoaSelecionada = { id: lancamento.pessoaId?.id ?? 0 };
+		}
+		catch (error) {
+			this.errorHandler.handle(error);
+		}
 	}
 
 	transformaSelectOptions(o: any[], propertyName: string): SelectOptions[] { // TODO: fix this 'any'

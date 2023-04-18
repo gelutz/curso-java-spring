@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AppRouterModule } from './router.module';
 
-
-import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { LancamentosModule } from './lancamentos/lancamentos.module';
 import { PessoasModule } from './pessoas/pessoas.module';
-import { Router } from './router';
+import { SegurancaModule } from './seguranca/seguranca.module';
 import { LogService } from './shared/log.service';
-
-
 
 @NgModule({
 	declarations: [
@@ -18,10 +15,12 @@ import { LogService } from './shared/log.service';
 	],
 	imports: [
 		BrowserModule,
+		CoreModule,
+		AppRouterModule,
+
 		LancamentosModule,
 		PessoasModule,
-		CoreModule,
-		RouterModule.forRoot(Router)
+		SegurancaModule
 	],
 	providers: [
 		LogService,
@@ -29,4 +28,5 @@ import { LogService } from './shared/log.service';
 	],
 	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

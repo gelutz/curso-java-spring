@@ -2,7 +2,7 @@
   <form class="toda-table" #form="ngForm" (ngSubmit)="(id === 'novo') ? salvar() : atualizar()">
     <div class="grid">
       <div class="col-12">
-        <h1>{{ (id !== null) ? 'Novo' : 'Edição de ' + 'Lançamento'}}</h1>
+        <h1>{{ (id !== null ? 'Novo' : 'Edição de ') + ' Lançamento'}}</h1>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       <div class="col-12 md:col-6 p-fluid ">
         <label class="block" for="">Descrição</label>
         <input name="descricao" [(ngModel)]="lancamento.descricao" #descricao="ngModel" pInputText type="text" required
-          minlength="10">
+          minlength="5">
 
         <app-mensagem-erro [control]="descricao" [dirty]="true" mensagem="Necessário preencher uma pequena descrição!"
           erro="required"></app-mensagem-erro>

@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Pageable } from 'src/app/@types/Pageable';
@@ -26,8 +27,14 @@ export class PessoaPesquisaComponent {
 		private pessoaService: PessoaService,
 		private messageService: MessageService,
 		private confirmationService: ConfirmationService,
-		private errorHandler: ErrorHandlerService
+		private errorHandler: ErrorHandlerService,
+		private title: Title
 	) { }
+
+	ngOnInit() {
+		this.title.setTitle('Pesquisa/Pessoa')
+	}
+
 	async pesquisar(pagina = 0): Promise<void> {
 		this.response = await this.pessoaService.pesquisar({
 			itensPorPagina: this.ITENS_POR_PAGINA,
