@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 import { LoginComponent } from './login/login.component';
 
 export function tokenGetter(): string {
-	console.log('pegando token')
 	return localStorage.getItem(environment.jwtLocalStorageKey) ?? '';
 }
 
