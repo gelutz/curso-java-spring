@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { PessoaDTO } from '../../@types/PessoaDTO';
@@ -26,10 +26,11 @@ export class PessoaCadastroComponent {
 	constructor(
 		private pessoaService: PessoaService,
 		private errorHandler: ErrorHandlerService,
-		private messageService: MessageService
+		private messageService: MessageService,
+		private router: Router
 	) { }
 
-	async salvar(form: NgForm): Promise<void> {
+	async salvar(): Promise<void> {
 		const pessoa = this.pessoa
 		Object.assign(pessoa, this.pessoa);
 
@@ -40,6 +41,7 @@ export class PessoaCadastroComponent {
 			this.errorHandler.handle(error)
 		}
 
-		form.reset()
+		this.router.navigate(['/pessoas'])
+
 	}
 }

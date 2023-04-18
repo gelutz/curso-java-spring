@@ -39,9 +39,6 @@ import { PessoaPesquisaComponent } from './pessoa-pesquisa/pesquisa-pessoa.compo
 		SharedModule,
 		RouterModule
 	],
-	exports: [
-		PessoaPesquisaComponent,
-		PessoaCadastroComponent
-	]
+	exports: []
 })
 export class PessoasModule { }

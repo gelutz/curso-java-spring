@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CategoriaService } from 'src/app/categorias/categorias.service';
@@ -28,7 +27,7 @@ class Lancamento {
 export class LancamentoCadastroComponent {
 
 
-
+	id: string | number = 0
 	lancamento = new Lancamento() as LancamentoDTO;
 	tipos?: string[]
 	categorias?: SelectOptions[]
@@ -68,12 +67,12 @@ export class LancamentoCadastroComponent {
 	}
 
 	async ngOnInit(): Promise<void> { // TODO: throws ExpressionChangedAfterItHasBeenCheckedError, não pode ser async
-		const id = this.route.snapshot.params['id']
+		this.id = this.route.snapshot.params['id']
 
-		if (id && id !== 'novo') {
+		if (this.id && this.id !== 'novo') {
 			try {
-				console.log(id)
-				const lancamento = await this.lancamentoService.buscarPorID(id)
+				console.log(this.id)
+				const lancamento = await this.lancamentoService.buscarPorID(this.id as number)
 
 				console.log(lancamento)
 				this.lancamento = lancamento
@@ -98,7 +97,7 @@ export class LancamentoCadastroComponent {
 		return mapped
 	}
 
-	async salvar(form: NgForm): Promise<void> {
+	async salvar(): Promise<void> {
 		try {
 			const formData = this.camposValidados()
 
@@ -108,10 +107,10 @@ export class LancamentoCadastroComponent {
 			this.errorHandler.handle(error)
 		}
 
-		form.reset()
+		this.router.navigate(['/lancamentos/novo'])
 	}
 
-	async atualizar(form: NgForm): Promise<void> {
+	async atualizar(): Promise<void> {
 		try {
 			const formData = this.camposValidados()
 			await this.lancamentoService.atualizar(formData)
@@ -120,8 +119,7 @@ export class LancamentoCadastroComponent {
 			this.errorHandler.handle(error)
 		}
 
-		this.router.navigate(['/lancamentos'])
-		form.reset()
+		this.router.navigate(['/lancamentos/novo'])
 	}
 
 	camposValidados(): LancamentoDTO {

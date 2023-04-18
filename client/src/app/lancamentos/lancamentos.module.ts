@@ -43,10 +43,7 @@ import { LancamentoPesquisaComponent } from './lancamento-pesquisa/lancamento-pe
 		SharedModule,
 		RouterModule
 	],
-	exports: [
-		LancamentoCadastroComponent,
-		LancamentoPesquisaComponent
-	],
+	exports: [],
 	providers: [
 		MessageService
 	]

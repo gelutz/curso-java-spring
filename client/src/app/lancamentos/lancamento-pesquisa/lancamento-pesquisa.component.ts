@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Pageable } from 'src/app/@types/Pageable';
@@ -29,7 +30,8 @@ export class LancamentoPesquisaComponent {
 		private lancamentoService: LancamentoService,
 		private messageService: MessageService,
 		private confirmationService: ConfirmationService,
-		private errorHandler: ErrorHandlerService
+		private errorHandler: ErrorHandlerService,
+		private router: Router
 	) { }
 
 	async pesquisar(pagina = 0): Promise<void> {
@@ -55,7 +57,7 @@ export class LancamentoPesquisaComponent {
 			return
 		}
 
-		this.tabela.reset()
+		this.router.navigate(['/lancamentos'])
 
 		this.messageService.add({ severity: 'success', detail: 'Lançamento excluído com sucesso!' })
 	}

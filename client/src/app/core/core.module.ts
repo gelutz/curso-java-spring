@@ -7,12 +7,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { NavbarComponent } from './navbar/navbar.component';
 import { OpenCloseButtonComponent } from './openclosebutton/openclosebutton.component';
+import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { ErrorHandlerService } from './services/error-handler.service';
 
 
 const declarations = [
 	NavbarComponent,
-	OpenCloseButtonComponent
+	OpenCloseButtonComponent,
+	PaginaNaoEncontradaComponent
 ]
 
 @NgModule({
