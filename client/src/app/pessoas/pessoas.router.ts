@@ -5,17 +5,28 @@ import { PessoaCadastroComponent } from "./pessoa-cadastro/pessoa-cadastro.compo
 import { PessoaPesquisaComponent } from "./pessoa-pesquisa/pesquisa-pessoa.component"
 
 export const Router: Routes = [
-	{ path: 'pessoas', component: PessoaPesquisaComponent, canActivate: [AuthGuard] },
-	{ path: 'pessoas/novo', component: PessoaCadastroComponent, canActivate: [AuthGuard] },
-	{ path: 'pessoas/:id', component: PessoaCadastroComponent, canActivate: [AuthGuard] }
+	{
+		path: "pessoas",
+		component: PessoaPesquisaComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_PESQUISAR_PESSOA"] },
+	},
+	{
+		path: "pessoas/novo",
+		component: PessoaCadastroComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_CADASTRAR_PESSOA"] },
+	},
+	{
+		path: "pessoas/:id",
+		component: PessoaCadastroComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_CADASTRAR_PESSOA"] },
+	},
 ]
 
 @NgModule({
-	imports: [
-		RouterModule.forRoot(Router)
-	],
-	exports: [
-		RouterModule
-	]
+	imports: [RouterModule.forRoot(Router)],
+	exports: [RouterModule],
 })
-export class PessoasRouterModule { }
+export class PessoasRouterModule {}

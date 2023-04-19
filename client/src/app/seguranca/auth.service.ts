@@ -6,6 +6,7 @@ import { MessageService } from "primeng/api"
 import { environment } from "src/environments/environment"
 import { JwtPayload } from "../@types/JwtPayload"
 import { JwtResponse } from "../@types/JwtResponse"
+import { AuthError } from "../core/errors/AuthError"
 import { ErrorHandlerService } from "../core/services/error-handler.service"
 
 @Injectable({
@@ -27,11 +28,6 @@ export class AuthService {
 		this.headers = new HttpHeaders()
 			.append("Authorization", `Basic ${environment.auth.jwtBasic}`)
 			.append("Content-Type", "application/x-www-form-urlencoded")
-	}
-
-	temPermissao(permissao: string): boolean {
-		if (!this.jwtPayload) return false
-		return this.jwtPayload.authorities.includes(permissao)
 	}
 
 	login(usuario: string, senha: string): Promise<void> {
@@ -83,6 +79,9 @@ export class AuthService {
 					resolve()
 				},
 				error: (error) => {
+					if (error?.error?.error == "invalid_token") {
+						error = new AuthError("Sessão expirada, favor fazer login novamente")
+					}
 					this.errorHandler.handle(error)
 				},
 				complete: () => console.log("completed!"),
@@ -107,5 +106,10 @@ export class AuthService {
 
 	private decodeToken(token: string): JwtPayload {
 		return (this.jwtHelper.decodeToken(token) ?? {}) as JwtPayload
+	}
+
+	temPermissao(permissao: string): boolean {
+		if (!this.jwtPayload) return false
+		return this.jwtPayload.authorities.includes(permissao)
 	}
 }

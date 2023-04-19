@@ -11,8 +11,18 @@ export const Router: Routes = [
 		canActivate: [AuthGuard],
 		data: { roles: ["ROLE_PESQUISAR_LANCAMENTO"] },
 	},
-	{ path: "lancamentos/novo", component: LancamentoCadastroComponent, canActivate: [AuthGuard] },
-	{ path: "lancamentos/:id", component: LancamentoCadastroComponent, canActivate: [AuthGuard] },
+	{
+		path: "lancamentos/novo",
+		component: LancamentoCadastroComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_CADASTRAR_LANCAMENTO"] },
+	},
+	{
+		path: "lancamentos/:id",
+		component: LancamentoCadastroComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_CADASTRAR_LANCAMENTO"] },
+	},
 ]
 
 @NgModule({

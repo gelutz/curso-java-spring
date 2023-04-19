@@ -1,13 +1,16 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { Injectable } from "@angular/core"
+import { Router } from "@angular/router"
 import { MessageService } from "primeng/api"
+import { AuthError } from "../errors/AuthError"
 
 @Injectable({
 	providedIn: "root",
 })
 export class ErrorHandlerService {
+	redirect = false
 	message = ""
-	constructor(private messageService: MessageService) {}
+	constructor(private messageService: MessageService, private router: Router) {}
 
 	handle(error: unknown): void {
 		// erro interno
@@ -15,6 +18,11 @@ export class ErrorHandlerService {
 			this.message = error.message
 			console.log(`ERROR: ${error.name} => ${error.message}`)
 			console.error(error.stack)
+		}
+
+		if (error instanceof AuthError) {
+			this.message = error.message
+			this.redirect = true
 		}
 
 		// erro na API
@@ -45,6 +53,11 @@ export class ErrorHandlerService {
 				this.message = message
 			})
 		}
+
 		this.messageService.add({ severity: "error", detail: this.message })
+
+		if (this.redirect) {
+			this.router.navigate(["/login"])
+		}
 	}
 }
