@@ -34,14 +34,14 @@ public class CategoriaResource {
 	private CategoriaRepository categoriaRepository;
 
 	@GetMapping
-	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and hasAuthority(SCOPE_read)")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
 	public List<Categoria> listar() {
 		return categoriaRepository.findAll();
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and hasAuthority(SCOPE_write)")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA')")
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		Categoria novaCategoria = categoriaRepository.save(categoria);
 

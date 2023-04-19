@@ -83,24 +83,24 @@ public class LancamentoService {
 		Lancamento novoLancamento = new Lancamento();
 		Categoria categoriaLancamento = new Categoria();
 
-		if (ObjectUtils.isEmpty(dados.getPessoaId())) {
+		if (ObjectUtils.isEmpty(dados.getPessoa())) {
 			throw new BadRequestException(
 					messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale()));
 		}
 
-		Pessoa pessoaLancamento = pessoaServices.buscarPorId(dados.getPessoaId().getId());
+		Pessoa pessoaLancamento = pessoaServices.buscarPorId(dados.getPessoa().getId());
 		if (pessoaLancamento == null || !pessoaLancamento.isAtivo()) {
 			throw new NotFoundException(this.NotFoundMessage());
 		}
 
-		categoriaLancamento = categoriaServices.buscarPorId(dados.getCategoriaId().getId());
+		categoriaLancamento = categoriaServices.buscarPorId(dados.getCategoria().getId());
 		if (categoriaLancamento == null) {
 			throw new NotFoundException(this.NotFoundMessage());
 		}
 
 		BeanUtils.copyProperties(dados, novoLancamento);
-		novoLancamento.setPessoaId(pessoaLancamento);
-		novoLancamento.setCategoriaId(categoriaLancamento);
+		novoLancamento.setPessoa(pessoaLancamento);
+		novoLancamento.setCategoria(categoriaLancamento);
 
 		return lancamentoRepository.save(novoLancamento);
 	}

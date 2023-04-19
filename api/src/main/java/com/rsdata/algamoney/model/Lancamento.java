@@ -41,11 +41,11 @@ public class Lancamento {
 
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
-	private Categoria categoriaId;
+	private Categoria categoria;
 
 	@ManyToOne
 	@JoinColumn(name = "pessoa_id")
-	private Pessoa pessoaId;
+	private Pessoa pessoa;
 
 	private String observacao;
 
@@ -97,28 +97,27 @@ public class Lancamento {
 		this.tipo = tipo;
 	}
 
-	public Pessoa getPessoaId() {
-		return this.pessoaId;
-	}
-
-	public void setPessoaId(Pessoa pessoaId) {
-		this.pessoaId = pessoaId;
-	}
-
 	public String getObservacao() {
 		return this.observacao;
-	}
-
-	public Categoria getCategoriaId() {
-		return categoriaId;
-	}
-
-	public void setCategoriaId(Categoria categoriaId) {
-		this.categoriaId = categoriaId;
 	}
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
 
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public Pessoa getPessoa() {
+		return this.pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
 }

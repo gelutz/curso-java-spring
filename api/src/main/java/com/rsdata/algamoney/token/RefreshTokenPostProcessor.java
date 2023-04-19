@@ -43,7 +43,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 
 	private void adicionarRefreshTokenNoCookie(String refreshToken, HttpServletRequest request,
 			HttpServletResponse response) {
-		Cookie rtCookie = new Cookie("refreshToken", refreshToken);
+		Cookie rtCookie = new Cookie("refresh_token", refreshToken);
 
 		rtCookie.setHttpOnly(true);
 		rtCookie.setSecure(false);

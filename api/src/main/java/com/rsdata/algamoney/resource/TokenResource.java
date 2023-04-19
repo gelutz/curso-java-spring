@@ -21,7 +21,7 @@ public class TokenResource {
 
 	@DeleteMapping("/revoke")
 	public void revoke(HttpServletRequest request, HttpServletResponse response) {
-		Cookie cookie = new Cookie("refreshToken", null);
+		Cookie cookie = new Cookie("refresh_token", null);
 		cookie.setHttpOnly(true);
 		cookie.setSecure(apiProperties.getSeguranca().isEnableHttps());
 		cookie.setPath(request.getContextPath() + "/oauth/token");
