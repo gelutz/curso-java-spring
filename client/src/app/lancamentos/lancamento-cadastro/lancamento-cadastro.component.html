@@ -1,5 +1,5 @@
 <div class="container">
-  <form class="toda-table" #form="ngForm" (ngSubmit)="(id === 'novo') ? salvar() : atualizar()">
+  <form class="toda-table" [formGroup]="form" (ngSubmit)="this.isEdicao() ? atualizar() : salvar()">
     <div class="grid">
       <div class="col-12">
         <h1>{{ (id !== null ? 'Novo' : 'Edição de ') + ' Lançamento'}}</h1>
@@ -8,63 +8,58 @@
 
     <div class="col-12">
       <label for="tipo">Tipo de lançamento</label>
-      <p-selectButton required [(ngModel)]="this.tipoSelecionado" name="tipo" [options]="tipos ?? []"
-        #tipo="ngModel"></p-selectButton>
-      <app-mensagem-erro [control]="tipo" mensagem="Necessário escolher algum valor!"
+      <p-selectButton required formControlName="tipo" name="tipo" [options]="tipos ?? []"
+        ></p-selectButton>
+      <app-mensagem-erro [control]="form.get('tipo')" mensagem="Necessário escolher algum valor!"
         erro="required"></app-mensagem-erro>
     </div>
 
     <div class="p-fluid block md:flex">
       <div class="col-12 md:col-6 p-fluid">
         <label for="">Vencimento</label>
-        <p-calendar name="vencimento" [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel"
-          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"
-          [required]="true"></p-calendar>
+        <p-calendar name="vencimento" formControlName="dataVencimento"
+          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"></p-calendar>
       </div>
       <div class="col-12 md:col-6 p-fluid">
-        <label for="">{{ tipo.value == 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
-        <p-calendar [(ngModel)]="lancamento.dataPagamento" name="recebimento" #recebe="ngModel"
-          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"
-          [required]="true"></p-calendar>
-        <app-mensagem-erro></app-mensagem-erro>
+        <label for="">{{ form.get('tipo')?.value == 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
+        <p-calendar formControlName="dataPagamento" name="recebimento"
+          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"></p-calendar>
         <p-message severity="error" text="Necessário selecionar uma data de recebimento/pagamento!"
-          *ngIf="recebe.touched && recebe.invalid"></p-message>
+          *ngIf="form.get('dataPagamento')?.touched && form.get('tipo')?.invalid"></p-message>
       </div>
     </div>
     <div class="p-fluid block md:flex">
       <div class="col-12 md:col-6 p-fluid ">
         <label class="block" for="">Descrição</label>
-        <input name="descricao" [(ngModel)]="lancamento.descricao" #descricao="ngModel" pInputText type="text" required
+        <input name="descricao" formControlName="descricao"  pInputText type="text" required
           minlength="5">
-
-        <app-mensagem-erro [control]="descricao" [dirty]="true" mensagem="Necessário preencher uma pequena descrição!"
+        <app-mensagem-erro [control]="form.get('descricao')" [dirty]="true" mensagem="Necessário preencher uma pequena descrição!"
           erro="required"></app-mensagem-erro>
-        <app-mensagem-erro [control]="descricao"
-          mensagem="O campo deve ter no mínimo {{ descricao.errors?.['minlength']?.requiredLength }} caracteres!"
+        <app-mensagem-erro [control]="form.get('descricao')"
+          mensagem="O campo deve ter no mínimo {{ form.get('descricao')?.errors?.['minlength']?.requiredLength }} caracteres!"
           erro="minlength"></app-mensagem-erro>
       </div>
       <div class="col-12 md:col-6 p-fluid ">
         <label class="block" for="">Valor</label>
-        <p-inputNumber name="valor" [(ngModel)]="lancamento.valor" #valor="ngModel" mode="currency" currency="BRL"
-          placeholder="0,00" [required]="true"></p-inputNumber>
-        <app-mensagem-erro [control]="valor" mensagem="Necessário preencher o valor!"
+        <p-inputNumber name="valor" formControlName="valor"  mode="currency" currency="BRL"></p-inputNumber>
+        <app-mensagem-erro [control]="form.get('valor')" mensagem="Necessário preencher o valor!"
           erro="required"></app-mensagem-erro>
 
       </div>
     </div>
     <div class="p-fluid block md:flex">
-      <div class="col-12 md:col-6 p-fluid ">
+      <div class="col-12 md:col-6 p-fluid" formGroupName="categoria">
         <label class="block" for="">Categoria</label>
-        <p-dropdown [(ngModel)]="categoriaSelecionada" name="categoria" [options]="categorias ?? []"></p-dropdown>
+        <p-dropdown formControlName="id"  name="categoria" [options]="categorias ?? []"></p-dropdown>
       </div>
-      <div class="col-12 md:col-6 p-fluid ">
+      <div class="col-12 md:col-6 p-fluid" formGroupName="pessoa">
         <label class="block" for="">Pessoa</label>
-        <p-dropdown [(ngModel)]="pessoaSelecionada" name="pessoa" [options]="pessoas ?? []"></p-dropdown>
+        <p-dropdown formControlName="id" name="pessoa" [options]="pessoas ?? []"></p-dropdown>
       </div>
     </div>
     <div class="col-12 p-fluid ">
       <label class="block" for="">Observação</label>
-      <textarea [(ngModel)]="lancamento.observacao" pInputText rows=" 3" name="observacao"></textarea>
+      <textarea formControlName="observacao" pInputText rows=" 3" name="observacao"></textarea>
     </div>
     <div class="col-12">
       <button class="end-buttons" pButton type="submit">Salvar</button>

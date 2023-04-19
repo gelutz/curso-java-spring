@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core'
-import { NgModel } from '@angular/forms'
+import { Component, Input } from "@angular/core"
+import { AbstractControl, NgModel } from "@angular/forms"
 
 @Component({
-	selector: 'app-mensagem-erro',
-	templateUrl: './mensagem-erro.component.html',
-	styleUrls: ['./mensagem-erro.component.css']
+	selector: "app-mensagem-erro",
+	templateUrl: "./mensagem-erro.component.html",
+	styleUrls: ["./mensagem-erro.component.css"],
 })
 export class MensagemErroComponent {
-	@Input() control: NgModel | undefined
+	@Input() control: AbstractControl<any, any> | NgModel | null = null
 	@Input() erro = ""
 	@Input() dirty = false
 	@Input() touched = false

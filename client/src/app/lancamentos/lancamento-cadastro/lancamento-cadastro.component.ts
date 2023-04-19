@@ -1,14 +1,13 @@
 import { Component } from "@angular/core"
+import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import { Title } from "@angular/platform-browser"
 import { ActivatedRoute, Router } from "@angular/router"
 import { MessageService } from "primeng/api"
-import { TipoLancamentoDTO } from "src/app/@types/TipoLancamentoDTO"
 import { CategoriaService } from "src/app/categorias/categorias.service"
 import { ErrorHandlerService } from "src/app/core/services/error-handler.service"
 import { capitalize } from "src/app/core/utils/Capitalize"
 import { formatISOToDate } from "src/app/core/utils/DateFormatter"
 import { PessoaService } from "src/app/pessoas/pessoa.service"
-import { LancamentoDTO } from "../../@types/LancamentoDTO"
 import { LancamentoService } from "../lancamento.service"
 
 type SelectOptions = {
@@ -16,23 +15,19 @@ type SelectOptions = {
 	value: number | string | { id: number }
 }
 
-class Lancamento {}
-
 @Component({
 	selector: "app-lancamento-cadastro",
 	templateUrl: "./lancamento-cadastro.component.html",
 	styleUrls: ["./lancamento-cadastro.component.css"],
 })
 export class LancamentoCadastroComponent {
-	lancamento = new Lancamento() as LancamentoDTO
+	// lancamento = new Lancamento() as LancamentoDTO
+	form = {} as FormGroup
+
 	id: string | number = 0
 	tipos?: string[]
 	categorias?: SelectOptions[]
 	pessoas?: SelectOptions[]
-
-	tipoSelecionado?: string
-	categoriaSelecionada?: { id: number }
-	pessoaSelecionada?: { id: number }
 
 	constructor(
 		private lancamentoService: LancamentoService,
@@ -42,31 +37,48 @@ export class LancamentoCadastroComponent {
 		private messageService: MessageService,
 		private route: ActivatedRoute,
 		private router: Router,
-		private title: Title
+		private title: Title,
+		private formBuilder: FormBuilder
 	) {
 		try {
 			this.lancamentoService.buscarTipos().then((tipos) => {
-				this.tipos = tipos.map((tipo) => {
-					return capitalize(tipo.toLowerCase())
-				})
+				this.tipos = tipos.map((tipo) => capitalize(tipo.toLowerCase()))
 			})
 
 			this.categoriaService.buscarCategorias().then((categorias) => {
-				this.categorias = this.transformaSelectOptions(categorias, "nome")
+				this.categorias = categorias.map((categoria) => ({
+					label: categoria.nome ?? "",
+					value: categoria.id ?? 1,
+				}))
 			})
 
 			this.pessoaService.pesquisarAtivos({}).then((pessoas) => {
-				this.pessoas = this.transformaSelectOptions(pessoas.content, "nome")
+				this.pessoas = pessoas.content.map((pessoa) => ({
+					label: pessoa.nome ?? "",
+					value: pessoa.id ?? 1,
+				}))
 			})
 		} catch (error) {
 			this.errorHandler.handle(error)
 		}
 	}
 
+	private atualizarTitulo(): void {
+		const title = `${this.isEdicao() ? "Edição" : "Cadastro"}/Lançamento`
+		this.title.setTitle(title)
+	}
+
+	// equivale a (this.id != undefined) && (this.id != 'novo')
+	// mas a expressão acima não funciona no TS
+	protected isEdicao = (): boolean => {
+		return !(!(this.id != undefined) || !(this.id != "novo"))
+	}
+
 	async ngOnInit(): Promise<void> {
 		// TODO: throws ExpressionChangedAfterItHasBeenCheckedError, não pode ser async
-		this.id = this.route.snapshot.params["id"]
+		this.configurarFormulario()
 
+		this.id = this.route.snapshot.params["id"]
 		if (this.isEdicao()) {
 			await this.carregarLancamentos()
 		}
@@ -74,44 +86,43 @@ export class LancamentoCadastroComponent {
 		this.atualizarTitulo()
 	}
 
-	atualizarTitulo(): void {
-		const title = `${this.isEdicao() ? "Edição" : "Cadastro"}/Lançamento`
-		this.title.setTitle(title)
+	configurarFormulario() {
+		this.form = this.formBuilder.group({
+			tipo: ["Receita", Validators.required],
+			descricao: [null, [Validators.required, Validators.minLength(5)]],
+			dataVencimento: [null, Validators.required],
+			dataPagamento: [null, Validators.required],
+			valor: [null, Validators.required],
+			observacao: [null],
+			categoria: this.formBuilder.group({
+				id: [null, Validators.required],
+				nome: [],
+			}),
+			pessoa: this.formBuilder.group({
+				id: [null, Validators.required],
+				nome: [],
+			}),
+		})
 	}
-
-	// equivale a (this.id != undefined) && (this.id != 'novo')
-	// mas a expressão acima não funciona no TS
-	private isEdicao = (): boolean => !(!(this.id != undefined) || !(this.id != "novo"))
 
 	private async carregarLancamentos(): Promise<void> {
 		try {
 			const lancamento = await this.lancamentoService.buscarPorID(this.id as number)
 
-			this.lancamento = lancamento
-			this.lancamento.dataVencimento = formatISOToDate(lancamento.dataVencimento)
-			this.lancamento.dataPagamento = formatISOToDate(lancamento.dataPagamento)
-			this.categoriaSelecionada = { id: lancamento.categoria?.id ?? 0 }
-			this.tipoSelecionado = capitalize(lancamento.tipo?.toLowerCase())
-			this.pessoaSelecionada = { id: lancamento.pessoa?.id ?? 0 }
+			this.form.patchValue(lancamento)
+			this.form.patchValue({
+				dataVencimento: formatISOToDate(lancamento.dataVencimento),
+				dataPagamento: formatISOToDate(lancamento.dataPagamento),
+				tipo: capitalize(lancamento.tipo?.toLowerCase()),
+			})
 		} catch (error) {
 			this.errorHandler.handle(error)
 		}
 	}
 
-	transformaSelectOptions(o: any[], propertyName: string): SelectOptions[] {
-		// TODO: fix this 'any'
-		const mapped = o.map((p) => {
-			return { label: capitalize(p[propertyName]), value: { id: p.id } }
-		})
-
-		return mapped
-	}
-
-	async salvar(): Promise<void> {
+	protected async salvar(): Promise<void> {
 		try {
-			const formData = this.camposValidados()
-
-			const newLancamento = await this.lancamentoService.salvar(formData)
+			const newLancamento = await this.lancamentoService.salvar(this.form.value)
 			this.messageService.add({
 				severity: "success",
 				detail: `Lançamento #${newLancamento.id} criado!`,
@@ -123,27 +134,17 @@ export class LancamentoCadastroComponent {
 		this.router.navigate(["/lancamentos/novo"])
 	}
 
-	async atualizar(): Promise<void> {
+	protected async atualizar(): Promise<void> {
 		try {
-			const formData = this.camposValidados()
-			await this.lancamentoService.atualizar(formData)
+			await this.lancamentoService.atualizar(this.form.value)
 			this.messageService.add({
 				severity: "success",
-				detail: `Lançamento #${formData.id} atualizado!`,
+				detail: `Lançamento #${this.form.get("id")} atualizado!`,
 			})
 		} catch (error) {
 			this.errorHandler.handle(error)
 		}
 
 		this.router.navigate(["/lancamentos/novo"])
-	}
-
-	camposValidados(): LancamentoDTO {
-		const lancamento = this.lancamento
-		// lancamento.categoriaId = { id:  }
-		lancamento.categoria = this.categoriaSelecionada
-		lancamento.pessoa = this.pessoaSelecionada
-		lancamento.tipo = this.tipoSelecionado?.toUpperCase() as TipoLancamentoDTO
-		return lancamento
 	}
 }

@@ -26,12 +26,9 @@ export class AuthGuard implements CanActivate {
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): GuardResponse {
 		let roles = route.data["roles"] as string[]
 
-		console.log(roles)
 		roles = roles.filter((role) => {
 			return this.authService.temPermissao(role)
 		})
-		console.log(roles)
-
 
 		if (roles.length == 0) {
 			this.messageService.add({ severity: "error", detail: "Acesso negado." })

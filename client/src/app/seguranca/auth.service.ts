@@ -66,7 +66,6 @@ export class AuthService {
 	}
 
 	renovarAccessToken(): Promise<void> {
-		console.log("renovando access token")
 		const body = "grant_type=refresh_token"
 
 		return new Promise((resolve) => {
@@ -81,13 +80,11 @@ export class AuthService {
 					resolve()
 				},
 				error: (error) => {
-					console.log("refresh token expirou")
 					if (error?.error?.error == "invalid_token") {
 						error = new AuthError("Sessão expirada, favor fazer login novamente")
 					}
 					this.errorHandler.handle(error)
 				},
-				complete: () => console.log("completed!"),
 			})
 		})
 	}

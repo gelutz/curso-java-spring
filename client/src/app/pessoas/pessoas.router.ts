@@ -10,20 +10,18 @@ export const Router: Routes = [
 		component: PessoaPesquisaComponent,
 		canActivate: [AuthGuard],
 		data: { roles: ["ROLE_PESQUISAR_PESSOA"] },
-		children: [
-			{
-				path: "novo",
-				component: PessoaCadastroComponent,
-				canActivate: [AuthGuard],
-				data: { roles: ["ROLE_CADASTRAR_PESSOA"] },
-			},
-			{
-				path: ":id",
-				component: PessoaCadastroComponent,
-				canActivate: [AuthGuard],
-				data: { roles: ["ROLE_CADASTRAR_PESSOA"] },
-			},
-		],
+	},
+	{
+		path: "pessoas/novo",
+		component: PessoaCadastroComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_CADASTRAR_PESSOA"] },
+	},
+	{
+		path: "pessoas/:id",
+		component: PessoaCadastroComponent,
+		canActivate: [AuthGuard],
+		data: { roles: ["ROLE_CADASTRAR_PESSOA"] },
 	},
 ]
 
