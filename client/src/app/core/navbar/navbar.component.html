@@ -16,7 +16,7 @@
       <a>Pessoas</a>
     </li>
     <li class="item">
-      <a [routerLink]="authService.jwtPayload ? '/logout' : '/login'">{{ authService.jwtPayload ? 'Logout' :
+      <a (click)="authService.logout()" >{{ authService.jwtPayload ? 'Logout' :
         'Login' }}</a>
     </li>
   </ul>

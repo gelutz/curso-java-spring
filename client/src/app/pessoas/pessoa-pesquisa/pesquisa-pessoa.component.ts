@@ -1,20 +1,19 @@
-import { Component, ViewChild } from '@angular/core'
-import { Title } from '@angular/platform-browser'
-import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api'
-import { Table } from 'primeng/table'
-import { Pageable } from 'src/app/@types/Pageable'
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service'
-import { AuthService } from 'src/app/seguranca/auth.service'
-import { PessoaDTO } from '../../@types/PessoaDTO'
-import { PessoaService } from '../pessoa.service'
+import { Component, ViewChild } from "@angular/core"
+import { Title } from "@angular/platform-browser"
+import { ConfirmationService, LazyLoadEvent, MessageService } from "primeng/api"
+import { Table } from "primeng/table"
+import { Pageable } from "src/app/@types/Pageable"
+import { ErrorHandlerService } from "src/app/core/services/error-handler.service"
+import { AuthService } from "src/app/seguranca/auth.service"
+import { PessoaDTO } from "../../@types/PessoaDTO"
+import { PessoaService } from "../pessoa.service"
 
 @Component({
-	selector: 'app-pessoa-pesquisa',
-	templateUrl: './pessoa-pesquisa.component.html',
-	styleUrls: ['./pessoa-pesquisa.component.css']
+	selector: "app-pessoa-pesquisa",
+	templateUrl: "./pessoa-pesquisa.component.html",
+	styleUrls: ["./pessoa-pesquisa.component.css"],
 })
 export class PessoaPesquisaComponent {
-
 	@ViewChild(Table) private tabela!: Table
 
 	ITENS_POR_PAGINA = 5
@@ -23,7 +22,6 @@ export class PessoaPesquisaComponent {
 	response: Pageable<PessoaDTO[]> = {} as Pageable<PessoaDTO[]>
 	pessoa!: PessoaDTO[]
 
-
 	constructor(
 		private pessoaService: PessoaService,
 		private messageService: MessageService,
@@ -31,10 +29,10 @@ export class PessoaPesquisaComponent {
 		private errorHandler: ErrorHandlerService,
 		private title: Title,
 		protected authService: AuthService
-	) { }
+	) {}
 
 	ngOnInit(): void {
-		this.title.setTitle('Pesquisa/Pessoa')
+		this.title.setTitle("Pesquisa/Pessoa")
 	}
 
 	async pesquisar(pagina = 0): Promise<void> {
@@ -61,13 +59,12 @@ export class PessoaPesquisaComponent {
 		this.tabela.reset()
 
 		this.messageService.add({
-			severity: 'success',
-			detail: `Pessoa ${currentState ? 'desativada' : 'ativada'} com sucesso!`
+			severity: "success",
+			detail: `Pessoa ${currentState ? "desativada" : "ativada"} com sucesso!`,
 		})
 	}
 
 	async excluir(id: number): Promise<void> {
-
 		try {
 			await this.pessoaService.excluir(id)
 		} catch (e) {
@@ -77,13 +74,13 @@ export class PessoaPesquisaComponent {
 
 		this.tabela.reset()
 
-		this.messageService.add({ severity: 'success', detail: 'Pessoa excluída com sucesso!' })
+		this.messageService.add({ severity: "success", detail: "Pessoa excluída com sucesso!" })
 	}
 
 	confirmarExclusao(id: number): void {
 		this.confirmationService.confirm({
-			message: 'Deseja excluir a Pessoa?',
-			accept: async () => await this.excluir(id)
+			message: "Deseja excluir a Pessoa?",
+			accept: async () => await this.excluir(id),
 		})
 	}
 }

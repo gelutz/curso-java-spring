@@ -43,7 +43,7 @@ export class AuthService {
 
 			returned.subscribe({
 				next: (resposta) => {
-					if (!this.jwtPayload?.jwt) {
+					if (!this.jwtPayload?.user_name) {
 						this.jwtPayload = this.decodeToken(resposta.access_token)
 						this.armazenarToken(resposta)
 					}
@@ -62,9 +62,11 @@ export class AuthService {
 	logout(): void {
 		localStorage.removeItem(environment.jwtLocalStorageKey)
 		this.jwtPayload = {} as JwtPayload
+		this.router.navigate(["/login"])
 	}
 
 	renovarAccessToken(): Promise<void> {
+		console.log("renovando access token")
 		const body = "grant_type=refresh_token"
 
 		return new Promise((resolve) => {
@@ -79,6 +81,7 @@ export class AuthService {
 					resolve()
 				},
 				error: (error) => {
+					console.log("refresh token expirou")
 					if (error?.error?.error == "invalid_token") {
 						error = new AuthError("Sessão expirada, favor fazer login novamente")
 					}
@@ -109,7 +112,7 @@ export class AuthService {
 	}
 
 	temPermissao(permissao: string): boolean {
-		if (!this.jwtPayload) return false
+		if (!this.jwtPayload?.user_name) return false
 		return this.jwtPayload.authorities.includes(permissao)
 	}
 }

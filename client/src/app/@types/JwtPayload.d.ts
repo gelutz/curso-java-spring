@@ -3,7 +3,7 @@ export type JwtPayload = {
 	user_name: string
 	nome: string
 	exp: number
-	jwt: string
+	jti: string
 	scope: string[]
 	authorities: string[]
 }

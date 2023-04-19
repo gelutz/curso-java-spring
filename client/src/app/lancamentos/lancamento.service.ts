@@ -15,10 +15,9 @@ export class LancamentoService {
 
 	async buscarTipos(): Promise<TipoLancamentoDTO[]> {
 		const url = `${this.baseUrl}/tipos`
-		const headers = new HttpHeaders().append("Authorization", `Basic ${environment.auth.basic}`)
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.get<TipoLancamentoDTO[]>(url, { headers })
+			const returned = this.http.get<TipoLancamentoDTO[]>(url)
 
 			returned.subscribe({
 				next: (tipos) => {
@@ -31,7 +30,7 @@ export class LancamentoService {
 
 	async buscarPorID(id: number): Promise<LancamentoDTO> {
 		const url = `${this.baseUrl}/${id}`
-		const headers = new HttpHeaders().append("Authorization", `Basic ${environment.auth.basic}`)
+		const headers = new HttpHeaders().append("Content-Type", "application/json")
 
 		return new Promise((resolve, reject) => {
 			const returned = this.http.get<LancamentoDTO>(url, { headers })
@@ -45,9 +44,7 @@ export class LancamentoService {
 
 	pesquisar(filtro: LancamentoFiltro): Promise<Pageable<LancamentoDTO[]>> {
 		const url = `${this.baseUrl}`
-		let params = new HttpParams()
-			.set("page", `${filtro.pagina}`)
-			.set("size", `${filtro.itensPorPagina}`)
+		let params = new HttpParams().set("page", `${filtro.pagina}`).set("size", `${filtro.itensPorPagina}`)
 
 		if (filtro.descricao) params = params.set("descricao", filtro.descricao ?? "")
 
@@ -80,9 +77,10 @@ export class LancamentoService {
 
 	atualizar(lancamento: LancamentoDTO): Promise<LancamentoDTO> {
 		const url = `${this.baseUrl}/${lancamento.id}`
+		const headers = new HttpHeaders().append("Content-Type", "application/json")
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.put<LancamentoDTO>(url, JSON.stringify(lancamento))
+			const returned = this.http.put<LancamentoDTO>(url, JSON.stringify(lancamento), { headers })
 
 			returned.subscribe({
 				next: resolve,

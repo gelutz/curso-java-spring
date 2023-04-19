@@ -16,7 +16,6 @@ export class ErrorHandlerService {
 		// erro interno
 		if (error instanceof Error) {
 			this.message = error.message
-			console.log(`ERROR: ${error.name} => ${error.message}`)
 			console.error(error.stack)
 		}
 

@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common"
 import { HttpClientModule } from "@angular/common/http"
 import { NgModule } from "@angular/core"
-import { FormsModule } from "@angular/forms"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { RouterModule } from "@angular/router"
 import { MessageService } from "primeng/api"
@@ -38,6 +38,7 @@ import { LancamentoPesquisaComponent } from "./lancamento-pesquisa/lancamento-pe
 		ToastModule,
 		SharedModule,
 		RouterModule,
+		ReactiveFormsModule,
 	],
 	exports: [],
 	providers: [MessageService],

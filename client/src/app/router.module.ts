@@ -6,9 +6,8 @@ import { PessoasRouterModule } from "./pessoas/pessoas.router"
 import { SegurancaRouterModule } from "./seguranca/seguranca.router"
 
 export const Router: Routes = [
-	{ path: '', redirectTo: '/lancamentos', pathMatch: 'full' },
-	{ path: '**', redirectTo: '404' },
-	{ path: '404', component: PaginaNaoEncontradaComponent }
+	{ path: "**", redirectTo: "404" },
+	{ path: "404", component: PaginaNaoEncontradaComponent },
 ]
 
 @NgModule({
@@ -16,10 +15,8 @@ export const Router: Routes = [
 		RouterModule.forRoot(Router),
 		LancamentoRouterModule,
 		PessoasRouterModule,
-		SegurancaRouterModule
+		SegurancaRouterModule,
 	],
-	exports: [
-		RouterModule
-	]
+	exports: [RouterModule],
 })
-export class AppRouterModule { }
+export class AppRouterModule {}

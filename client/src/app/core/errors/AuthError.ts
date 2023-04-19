@@ -1,5 +1,6 @@
 export class AuthError extends Error {
-	constructor(msg: string) {
+	constructor(private msg: string) {
 		super(msg)
+		super.stack = ""
 	}
 }

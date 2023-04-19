@@ -1,3 +1,4 @@
+import { Location } from "@angular/common"
 import { Injectable } from "@angular/core"
 import {
 	ActivatedRouteSnapshot,
@@ -19,18 +20,22 @@ export class AuthGuard implements CanActivate {
 	constructor(
 		private authService: AuthService,
 		private router: Router,
-		private messageService: MessageService
+		private messageService: MessageService,
+		private _location: Location
 	) {}
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): GuardResponse {
 		let roles = route.data["roles"] as string[]
 
+		console.log(roles)
 		roles = roles.filter((role) => {
-			this.authService.temPermissao(role)
+			return this.authService.temPermissao(role)
 		})
+		console.log(roles)
 
-		if (!roles) {
+
+		if (roles.length == 0) {
 			this.messageService.add({ severity: "error", detail: "Acesso negado." })
-			this.router.navigate(["/"])
+			this.router.navigate(["/login"])
 			return false
 		}
 

@@ -24,8 +24,8 @@ class Lancamento {}
 	styleUrls: ["./lancamento-cadastro.component.css"],
 })
 export class LancamentoCadastroComponent {
-	id: string | number = 0
 	lancamento = new Lancamento() as LancamentoDTO
+	id: string | number = 0
 	tipos?: string[]
 	categorias?: SelectOptions[]
 	pessoas?: SelectOptions[]
@@ -144,7 +144,6 @@ export class LancamentoCadastroComponent {
 		lancamento.categoria = this.categoriaSelecionada
 		lancamento.pessoa = this.pessoaSelecionada
 		lancamento.tipo = this.tipoSelecionado?.toUpperCase() as TipoLancamentoDTO
-		console.log(lancamento)
 		return lancamento
 	}
 }

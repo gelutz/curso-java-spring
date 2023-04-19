@@ -10,18 +10,21 @@ export const Router: Routes = [
 		component: LancamentoPesquisaComponent,
 		canActivate: [AuthGuard],
 		data: { roles: ["ROLE_PESQUISAR_LANCAMENTO"] },
-	},
-	{
-		path: "lancamentos/novo",
-		component: LancamentoCadastroComponent,
-		canActivate: [AuthGuard],
-		data: { roles: ["ROLE_CADASTRAR_LANCAMENTO"] },
-	},
-	{
-		path: "lancamentos/:id",
-		component: LancamentoCadastroComponent,
-		canActivate: [AuthGuard],
-		data: { roles: ["ROLE_CADASTRAR_LANCAMENTO"] },
+		children: [
+			{
+				path: "novo",
+				pathMatch: "full",
+				component: LancamentoCadastroComponent,
+				canActivate: [AuthGuard],
+				data: { roles: ["ROLE_CADASTRAR_LANCAMENTO"] },
+			},
+			{
+				path: ":id",
+				component: LancamentoCadastroComponent,
+				canActivate: [AuthGuard],
+				data: { roles: ["ROLE_CADASTRAR_LANCAMENTO"] },
+			},
+		],
 	},
 ]
 
