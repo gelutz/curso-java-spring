@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
-import { PessoaDTO } from '../../@types/PessoaDTO';
-import { PessoaService } from '../pessoa.service';
+import { Component } from '@angular/core'
+import { Title } from '@angular/platform-browser'
+import { ActivatedRoute, Router } from '@angular/router'
+import { MessageService } from 'primeng/api'
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service'
+import { PessoaDTO } from '../../@types/PessoaDTO'
+import { PessoaService } from '../pessoa.service'
 
 class Pessoa {
 	nome = ""
@@ -35,7 +35,7 @@ export class PessoaCadastroComponent {
 	) { }
 
 	ngOnInit(): void {
-		this.id = this.route.snapshot.params['id'];
+		this.id = this.route.snapshot.params['id']
 		this.atualizarTitulo()
 	}
 
@@ -50,7 +50,7 @@ export class PessoaCadastroComponent {
 
 	async salvar(): Promise<void> {
 		const pessoa = this.pessoa
-		Object.assign(pessoa, this.pessoa);
+		Object.assign(pessoa, this.pessoa)
 
 		try {
 			const newPessoa = await this.pessoaService.salvar(this.pessoa)

@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
-import { Pageable } from 'src/app/@types/Pageable';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
-import { formatDateToISO } from 'src/app/core/utils/DateFormatter';
-import { LancamentoDTO } from '../../@types/LancamentoDTO';
-import { LancamentoService } from '../lancamento.service';
-
+import { Component } from "@angular/core"
+import { Title } from "@angular/platform-browser"
+import { ActivatedRoute, Router } from "@angular/router"
+import { ConfirmationService, LazyLoadEvent, MessageService } from "primeng/api"
+import { Pageable } from "src/app/@types/Pageable"
+import { ErrorHandlerService } from "src/app/core/services/error-handler.service"
+import { formatDateToISO } from "src/app/core/utils/DateFormatter"
+import { AuthService } from "src/app/seguranca/auth.service"
+import { LancamentoDTO } from "../../@types/LancamentoDTO"
+import { LancamentoService } from "../lancamento.service"
 
 @Component({
-	selector: 'app-lancamento-pesquisa',
-	templateUrl: './lancamento-pesquisa.component.html',
-	styleUrls: ['./lancamento-pesquisa.component.css']
+	selector: "app-lancamento-pesquisa",
+	templateUrl: "./lancamento-pesquisa.component.html",
+	styleUrls: ["./lancamento-pesquisa.component.css"],
 })
 export class LancamentoPesquisaComponent {
 	id: string | number = 0
@@ -30,12 +30,13 @@ export class LancamentoPesquisaComponent {
 		private errorHandler: ErrorHandlerService,
 		private route: ActivatedRoute,
 		private router: Router,
-		private title: Title
-	) { }
+		private title: Title,
+		protected authService: AuthService
+	) {}
 
 	ngOnInit(): void {
-		this.id = this.route.snapshot.params['id'];
-		this.title.setTitle('Pesquisa/Lançamento')
+		this.id = this.route.snapshot.params["id"]
+		this.title.setTitle("Pesquisa/Lançamento")
 	}
 
 	async pesquisar(pagina = 0): Promise<void> {
@@ -45,31 +46,33 @@ export class LancamentoPesquisaComponent {
 				pagina,
 				descricao: this.descricao,
 				vencimentoDe: formatDateToISO(this.vencimentoDe),
-				vencimentoAte: formatDateToISO(this.vencimentoAte)
+				vencimentoAte: formatDateToISO(this.vencimentoAte),
 			})
 		} catch (e) {
-			this.errorHandler.handle(e);
+			this.errorHandler.handle(e)
 		}
 	}
 
 	async excluir(id: number): Promise<void> {
-
 		try {
 			await this.lancamentoService.excluir(id)
 		} catch (e) {
-			this.errorHandler.handle(e);
+			this.errorHandler.handle(e)
 			return
 		}
 
-		this.router.navigate(['/lancamentos'])
+		this.router.navigate(["/lancamentos"])
 
-		this.messageService.add({ severity: 'success', detail: 'Lançamento excluído com sucesso!' })
+		this.messageService.add({
+			severity: "success",
+			detail: "Lançamento excluído com sucesso!",
+		})
 	}
 
 	confirmarExclusao(id: number): void {
 		this.confirmationService.confirm({
-			message: 'Deseja excluir o lançamento?',
-			accept: async () => await this.excluir(id)
+			message: "Deseja excluir o lançamento?",
+			accept: async () => await this.excluir(id),
 		})
 	}
 

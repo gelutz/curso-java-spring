@@ -1,15 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { RippleModule } from 'primeng/ripple';
-import { environment } from 'src/environments/environment';
-import { LoginComponent } from './login/login.component';
+import { CommonModule } from '@angular/common'
+import { HTTP_INTERCEPTORS } from '@angular/common/http'
+import { NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt'
+import { ButtonModule } from 'primeng/button'
+import { InputTextModule } from 'primeng/inputtext'
+import { RippleModule } from 'primeng/ripple'
+import { environment } from 'src/environments/environment'
+import { RefreshTokenInterceptor } from './interceptors/RefreshToken.interceptor'
+import { LoginComponent } from './login/login.component'
 
 export function tokenGetter(): string {
-	return localStorage.getItem(environment.jwtLocalStorageKey) ?? '';
+	return localStorage.getItem(environment.jwtLocalStorageKey) ?? ''
 }
 
 @NgModule({
@@ -30,6 +32,9 @@ export function tokenGetter(): string {
 			},
 		})
 	],
-	providers: [JwtHelperService]
+	providers: [
+		JwtHelperService,
+		{ provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true }],
+	// AuthGuard
 })
 export class SegurancaModule { }

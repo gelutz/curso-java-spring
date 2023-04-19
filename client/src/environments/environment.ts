@@ -11,7 +11,7 @@ export const environment = {
 		jwtSecret: 's3cr3t'
 	},
 	jwtLocalStorageKey: 'algamoney:jwt'
-};
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

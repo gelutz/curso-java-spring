@@ -54,13 +54,19 @@
             </td>
             <td class="col-acoes">
               <span class="p-column-title">Editar/Excluir</span>
-              <a pButton pTooltip="Editar" tooltipPosition="top" icon="pi pi-pencil"></a>
+              <button class="mr-2" [routerLink]="['/pessoas', pessoa.id]"
+                [disabled]="!authService.temPermissao('ROLE_CADASTRAR_PESSOA')" pButton pTooltip="Editar"
+                tooltipPosition="top" icon="pi pi-pencil"></button>
 
-              <a pButton (click)="mudarAtivo(pessoa.id, pessoa.ativo)" tooltipPosition="top" icon="pi pi-power-off"
+              <button (click)="mudarAtivo(pessoa.id, pessoa.ativo)" class="mr-2"
+                [disabled]="!authService.temPermissao('ROLE_CADASTRAR_PESSOA')" pButton
                 [pTooltip]="pessoa.ativo ? 'Desativar' : 'Ativar'"
-                [style.backgroundColor]="pessoa.ativo ? 'var(--red-300)' : 'var(--green-300)'"></a>
+                [style.backgroundColor]="pessoa.ativo ? 'var(--red-300)' : 'var(--green-300)'" tooltipPosition="top"
+                icon="pi pi-power-off"></button>
 
-              <button pButton (click)="confirmarExclusao(pessoa.id)" tooltipPosition="top" icon="pi pi-trash"></button>
+              <button pButton (click)="confirmarExclusao(pessoa.id)"
+                [disabled]="!authService.temPermissao('ROLE_REMOVER_PESSOA')" tooltipPosition="top"
+                icon="pi pi-trash"></button>
             </td>
           </tr>
         </ng-template>

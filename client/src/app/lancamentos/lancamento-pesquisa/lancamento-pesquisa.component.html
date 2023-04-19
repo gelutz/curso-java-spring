@@ -20,7 +20,9 @@
       </div>
 
       <div class="col-12">
-        <button pButton type="submit">Pesquisar</button>
+        <button pButton class="mr-2" type="submit">Pesquisar</button>
+        <button *ngIf="authService.temPermissao('ROLE_CADASTRAR_LANCAMENTO')" routerLink="/lancamentos/novo"
+          class="end-buttons" pButton type="button">Novo</button>
       </div>
     </div>
   </form>
@@ -51,7 +53,7 @@
           <tr>
             <td>
               <span class="p-column-title">Pessoa</span>
-              {{ lancamento.pessoa }}
+              {{ lancamento.pessoa?.nome }}
             </td>
             <td>
               <span class="p-column-title">Descrição</span>
@@ -73,17 +75,15 @@
             </td>
             <td class="col-acoes">
               <span class="p-column-title">Editar/Excluir</span>
-              <a class="edit-icon" [routerLink]="['/lancamentos', lancamento.id]" pButton pTooltip="Editar"
-                tooltipPosition="top" icon="pi pi-pencil"></a>
-              <button pButton pTooltip="Excluir" (click)="confirmarExclusao(lancamento.id)" tooltipPosition="top"
-                icon="pi pi-trash"></button>
+              <button class="mr-2" [disabled]="!authService.temPermissao('ROLE_CADASTRAR_LANCAMENTO')"
+                [routerLink]="['/lancamentos', lancamento.id]" pButton pTooltip="Editar" tooltipPosition="top"
+                icon="pi pi-pencil"></button>
+              <button pButton pTooltip="Excluir" [disabled]="!authService.temPermissao('ROLE_CADASTRAR_LANCAMENTO')"
+                (click)="confirmarExclusao(lancamento.id)" tooltipPosition="top" icon="pi pi-trash"></button>
             </td>
           </tr>
         </ng-template>
       </p-table>
-    </div>
-    <div class="col-12">
-      <button routerLink="/lancamentos/novo" class="end-buttons" pButton type="button">Novo</button>
     </div>
   </div>
 </div>

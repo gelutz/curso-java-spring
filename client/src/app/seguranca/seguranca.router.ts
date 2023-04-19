@@ -1,11 +1,11 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { LoginComponent } from "./login/login.component";
+import { NgModule } from "@angular/core"
+import { RouterModule, Routes } from "@angular/router"
+import { LoginComponent } from "./login/login.component"
+import { LogoutComponent } from "./login/logout.component"
 
 export const Router: Routes = [
 	{ path: 'login', component: LoginComponent },
-	// { path: 'login/auth' },
-	// { path: 'logout', component: LogoutComponent },
+	{ path: 'logout', component: LogoutComponent },
 ]
 
 @NgModule({

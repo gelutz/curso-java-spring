@@ -1,11 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Pageable } from 'src/app/@types/Pageable';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
-import { PessoaDTO } from '../../@types/PessoaDTO';
-import { PessoaService } from '../pessoa.service';
+import { Component, ViewChild } from '@angular/core'
+import { Title } from '@angular/platform-browser'
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api'
+import { Table } from 'primeng/table'
+import { Pageable } from 'src/app/@types/Pageable'
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service'
+import { AuthService } from 'src/app/seguranca/auth.service'
+import { PessoaDTO } from '../../@types/PessoaDTO'
+import { PessoaService } from '../pessoa.service'
 
 @Component({
 	selector: 'app-pessoa-pesquisa',
@@ -14,7 +15,7 @@ import { PessoaService } from '../pessoa.service';
 })
 export class PessoaPesquisaComponent {
 
-	@ViewChild(Table) private tabela!: Table;
+	@ViewChild(Table) private tabela!: Table
 
 	ITENS_POR_PAGINA = 5
 
@@ -28,10 +29,11 @@ export class PessoaPesquisaComponent {
 		private messageService: MessageService,
 		private confirmationService: ConfirmationService,
 		private errorHandler: ErrorHandlerService,
-		private title: Title
+		private title: Title,
+		protected authService: AuthService
 	) { }
 
-	ngOnInit() {
+	ngOnInit(): void {
 		this.title.setTitle('Pesquisa/Pessoa')
 	}
 
@@ -52,7 +54,7 @@ export class PessoaPesquisaComponent {
 		try {
 			await this.pessoaService.mudarAtivo(id, currentState)
 		} catch (e) {
-			this.errorHandler.handle(e);
+			this.errorHandler.handle(e)
 			return
 		}
 
@@ -69,7 +71,7 @@ export class PessoaPesquisaComponent {
 		try {
 			await this.pessoaService.excluir(id)
 		} catch (e) {
-			this.errorHandler.handle(e);
+			this.errorHandler.handle(e)
 			return
 		}
 

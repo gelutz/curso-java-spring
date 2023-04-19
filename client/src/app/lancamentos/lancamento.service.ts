@@ -1,23 +1,21 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { LancamentoDTO } from '../@types/LancamentoDTO';
-import { LancamentoFiltro } from '../@types/LancamentoFiltro';
-import { Pageable } from '../@types/Pageable';
-import { TipoLancamentoDTO } from '../@types/TipoLancamentoDTO';
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http"
+import { Injectable } from "@angular/core"
+import { environment } from "src/environments/environment"
+import { LancamentoDTO } from "../@types/LancamentoDTO"
+import { LancamentoFiltro } from "../@types/LancamentoFiltro"
+import { Pageable } from "../@types/Pageable"
+import { TipoLancamentoDTO } from "../@types/TipoLancamentoDTO"
 
 @Injectable({
-	providedIn: 'root'
+	providedIn: "root",
 })
 export class LancamentoService {
-
-
 	baseUrl = `${environment.baseUrl}/lancamentos`
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
 	async buscarTipos(): Promise<TipoLancamentoDTO[]> {
 		const url = `${this.baseUrl}/tipos`
-		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
+		const headers = new HttpHeaders().append("Authorization", `Basic ${environment.auth.basic}`)
 
 		return new Promise((resolve, reject) => {
 			const returned = this.http.get<TipoLancamentoDTO[]>(url, { headers })
@@ -26,47 +24,43 @@ export class LancamentoService {
 				next: (tipos) => {
 					resolve(tipos)
 				},
-				error: reject
+				error: reject,
 			})
 		})
 	}
 
 	async buscarPorID(id: number): Promise<LancamentoDTO> {
 		const url = `${this.baseUrl}/${id}`
-		const headers = (new HttpHeaders()).append('Authorization', `Basic ${environment.auth.basic}`)
+		const headers = new HttpHeaders().append("Authorization", `Basic ${environment.auth.basic}`)
 
 		return new Promise((resolve, reject) => {
 			const returned = this.http.get<LancamentoDTO>(url, { headers })
 
 			returned.subscribe({
 				next: resolve,
-				error: reject
+				error: reject,
 			})
 		})
 	}
 
 	pesquisar(filtro: LancamentoFiltro): Promise<Pageable<LancamentoDTO[]>> {
-
 		const url = `${this.baseUrl}`
 		let params = new HttpParams()
-			.set('page', `${filtro.pagina}`)
-			.set('size', `${filtro.itensPorPagina}`)
+			.set("page", `${filtro.pagina}`)
+			.set("size", `${filtro.itensPorPagina}`)
 
-		if (filtro.descricao)
-			params = params.set('descricao', filtro.descricao ?? '')
+		if (filtro.descricao) params = params.set("descricao", filtro.descricao ?? "")
 
-		if (filtro.vencimentoDe)
-			params = params.set('vencimentoDe', filtro.vencimentoDe ?? '')
+		if (filtro.vencimentoDe) params = params.set("vencimentoDe", filtro.vencimentoDe ?? "")
 
-		if (filtro.vencimentoAte)
-			params = params.set('vencimentoAte', filtro.vencimentoAte ?? '')
+		if (filtro.vencimentoAte) params = params.set("vencimentoAte", filtro.vencimentoAte ?? "")
 
 		return new Promise((resolve, reject) => {
 			const returned = this.http.get<Pageable<LancamentoDTO[]>>(url, { params })
 
 			returned.subscribe({
 				next: resolve,
-				error: reject
+				error: reject,
 			})
 		})
 	}
@@ -79,7 +73,7 @@ export class LancamentoService {
 
 			returned.subscribe({
 				next: resolve,
-				error: reject
+				error: reject,
 			})
 		})
 	}
@@ -92,7 +86,7 @@ export class LancamentoService {
 
 			returned.subscribe({
 				next: resolve,
-				error: reject
+				error: reject,
 			})
 		})
 	}
@@ -105,7 +99,7 @@ export class LancamentoService {
 
 			returned.subscribe({
 				next: () => resolve(),
-				error: reject
+				error: reject,
 			})
 		})
 	}

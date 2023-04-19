@@ -22,8 +22,3 @@
   text-align: center;
   justify-content: space-between;
 }
-
-.col-acoes>a,
-app-openclose-button {
-  margin-right: .5em;
-}

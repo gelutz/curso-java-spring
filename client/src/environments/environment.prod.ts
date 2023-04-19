@@ -7,4 +7,4 @@ export const environment = {
 		jwtSecret: 's3cr3t'
 	},
 	jwtLocalStorageKey: 'algamoney:jwt'
-};
+}

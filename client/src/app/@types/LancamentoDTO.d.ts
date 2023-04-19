@@ -1,12 +1,12 @@
-import { CategoriaDTO } from "src/app/@types/CategoriaDTO";
-import { PessoaDTO } from "./PessoaDTO";
-import { TipoLancamentoDTO } from "./TipoLancamentoDTO";
+import { CategoriaDTO } from "src/app/@types/CategoriaDTO"
+import { PessoaDTO } from "./PessoaDTO"
+import { TipoLancamentoDTO } from "./TipoLancamentoDTO"
 
 export type LancamentoDTO = {
 	id: number
 	tipo?: TipoLancamentoDTO;
-	categoriaId?: CategoriaDTO;
-	pessoaId?: PessoaDTO;
+	categoria?: CategoriaDTO;
+	pessoa?: PessoaDTO;
 	descricao: string;
 	dataVencimento: Date;
 	dataPagamento?: Date;

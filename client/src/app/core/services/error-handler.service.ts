@@ -1,14 +1,13 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { HttpErrorResponse } from "@angular/common/http"
+import { Injectable } from "@angular/core"
+import { MessageService } from "primeng/api"
 
 @Injectable({
-	providedIn: 'root'
+	providedIn: "root",
 })
 export class ErrorHandlerService {
-
 	message = ""
-	constructor(private messageService: MessageService) { }
+	constructor(private messageService: MessageService) {}
 
 	handle(error: unknown): void {
 		// erro interno
@@ -20,7 +19,7 @@ export class ErrorHandlerService {
 
 		// erro na API
 		if (error instanceof HttpErrorResponse) {
-			const status = error.status
+			const status = error.status.toString()
 			const messages = []
 
 			// ordem de importância
@@ -34,16 +33,18 @@ export class ErrorHandlerService {
 			console.log(error)
 			this.message = messages[0] // mostra a mais importante
 
-			if (status.toString().startsWith('5'))
-				this.message = 'Erro interno no servidor.'
+			const messageByError = {
+				401: "Você não possui permissão para isso.",
+				403: "Você não tem permissão para executar essa ação.",
+				404: "Recurso não encontrado.",
+				500: "Erro interno no servidor.",
+			}
 
-			if (status === 401)
-				this.message = 'Você não possui permissão para isso.'
-
-			if (status === 404)
-				this.message = 'Recurso não encontrado'
-
+			Object.entries(messageByError).map(([code, message]) => {
+				if (code !== status) return
+				this.message = message
+			})
 		}
-		this.messageService.add({ severity: 'error', detail: this.message })
+		this.messageService.add({ severity: "error", detail: this.message })
 	}
 }

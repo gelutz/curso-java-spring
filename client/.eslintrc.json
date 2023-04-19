@@ -18,6 +18,17 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "warn"
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "max-len": [
+      "error",
+      {
+        "code": 105,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "indent": ["error", "tab"],
+    "semi": ["error", "never"]
+
   }
 }
