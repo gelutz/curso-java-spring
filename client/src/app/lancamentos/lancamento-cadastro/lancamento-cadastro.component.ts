@@ -25,7 +25,7 @@ export class LancamentoCadastroComponent {
 	form = {} as FormGroup
 
 	id: string | number = 0
-	tipos?: string[]
+	tipos?: SelectOptions[]
 	categorias?: SelectOptions[]
 	pessoas?: SelectOptions[]
 
@@ -42,7 +42,10 @@ export class LancamentoCadastroComponent {
 	) {
 		try {
 			this.lancamentoService.buscarTipos().then((tipos) => {
-				this.tipos = tipos.map((tipo) => capitalize(tipo.toLowerCase()))
+				this.tipos = tipos.map((tipo) => ({
+					label: capitalize(tipo.toLowerCase()),
+					value: tipo.toUpperCase(),
+				}))
 			})
 
 			this.categoriaService.buscarCategorias().then((categorias) => {
@@ -88,7 +91,8 @@ export class LancamentoCadastroComponent {
 
 	configurarFormulario() {
 		this.form = this.formBuilder.group({
-			tipo: ["Receita", Validators.required],
+			id: [null],
+			tipo: ["RECEITA", Validators.required],
 			descricao: [null, [Validators.required, Validators.minLength(5)]],
 			dataVencimento: [null, Validators.required],
 			dataPagamento: [null, Validators.required],
@@ -113,7 +117,6 @@ export class LancamentoCadastroComponent {
 			this.form.patchValue({
 				dataVencimento: formatISOToDate(lancamento.dataVencimento),
 				dataPagamento: formatISOToDate(lancamento.dataPagamento),
-				tipo: capitalize(lancamento.tipo?.toLowerCase()),
 			})
 		} catch (error) {
 			this.errorHandler.handle(error)
@@ -139,7 +142,7 @@ export class LancamentoCadastroComponent {
 			await this.lancamentoService.atualizar(this.form.value)
 			this.messageService.add({
 				severity: "success",
-				detail: `Lançamento #${this.form.get("id")} atualizado!`,
+				detail: `Lançamento #${this.form.get("id")?.value} atualizado!`,
 			})
 		} catch (error) {
 			this.errorHandler.handle(error)

@@ -78,6 +78,8 @@ export class LancamentoService {
 	}
 
 	atualizar(lancamento: LancamentoDTO): Promise<LancamentoDTO> {
+		console.log(lancamento)
+
 		const url = `${this.baseUrl}/${lancamento.id}`
 		return new Promise((resolve, reject) => {
 			const returned = this.http.put<LancamentoDTO>(url, JSON.stringify(lancamento), {
