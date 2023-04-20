@@ -1,4 +1,4 @@
-package com.rsdata.algamoney.config.token;
+package com.rsdata.algamoney.config;
 
 import java.util.HashMap;
 import java.util.Map;

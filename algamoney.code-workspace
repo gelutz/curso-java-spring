@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "api"
+		},
+		{
+			"path": "client"
+		},
+		{
+			"name": "",
+			"path": ".git"
+		}
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "disabled",
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.debug.settings.onBuildFailureProceed": true
+	}
+}

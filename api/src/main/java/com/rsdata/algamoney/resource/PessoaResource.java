@@ -40,7 +40,7 @@ public class PessoaResource {
 	private PessoaRepository pessoaRepository;
 
 	@Autowired
-	private PessoaService pessoaServices;
+	private PessoaService pessoaService;
 
 	// [GET]
 	@GetMapping
@@ -77,7 +77,7 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Pessoa> criarPessoa(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
-		Pessoa novaPessoa = pessoaRepository.save(pessoa);
+		Pessoa novaPessoa = pessoaService.salvar(pessoa);
 
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, novaPessoa.getId()));
 
@@ -90,7 +90,7 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
-		Pessoa pessoaAtualizada = pessoaServices.atualizar(id, pessoa);
+		Pessoa pessoaAtualizada = pessoaService.atualizar(id, pessoa);
 
 		if (pessoaAtualizada == null) {
 			return ResponseEntity.notFound().build();
@@ -103,14 +103,14 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	// @PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Object> atualizarAtivo(@PathVariable Long id, @Valid @RequestBody boolean ativo) {
-		Pessoa pessoa = pessoaServices.buscarPorId(id);
+		Pessoa pessoa = pessoaService.buscarPorId(id);
 
 		if (pessoa == null) {
 			return ResponseEntity.notFound().build();
 		}
 
 		pessoa.setAtivo(ativo);
-		pessoaServices.atualizar(id, pessoa);
+		pessoaService.atualizar(id, pessoa);
 
 		return ResponseEntity.ok(pessoa);
 	}
@@ -119,7 +119,7 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA')")
 	public ResponseEntity<Object> atualizarEndereco(@PathVariable Long id, @Valid @RequestBody Endereco enderecoNovo) {
-		Pessoa pessoaAtualizada = pessoaServices.atualizarEndereco(id, enderecoNovo);
+		Pessoa pessoaAtualizada = pessoaService.atualizarEndereco(id, enderecoNovo);
 
 		if (pessoaAtualizada == null) {
 			return ResponseEntity.notFound().build();

@@ -1,5 +1,6 @@
 package com.rsdata.algamoney.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ import com.rsdata.algamoney.model.Lancamento;
 import com.rsdata.algamoney.model.Pessoa;
 import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
+import com.rsdata.algamoney.repository.projection.LancamentosPorCategoria;
+import com.rsdata.algamoney.repository.projection.LancamentosPorDia;
 import com.rsdata.algamoney.repository.projection.ResumoLancamento;
 
 @Service
@@ -41,6 +44,17 @@ public class LancamentoService {
 				LocaleContextHolder.getLocale());
 	}
 
+	// @Scheduled(fixedDelay = 1000 * 10)
+	// public void avisarSobreLancamentosVencidos() {
+	// System.out.println("-x-x-x:oi:x-x-x-");
+	// }
+
+	// sec, min, hour, dayOfMonth, month, dayOfWeek
+	// @Scheduled(cron = "0 59 8 * * *")
+	// public void avisarSobreLancamentosVencidos() {
+	// System.out.println("-x-x-x:oi:x-x-x-");
+	// }
+
 	public Page<Lancamento> pesquisar(LancamentoFilter filter, Pageable page) {
 		Page<Lancamento> lancamentos = lancamentoRepository.filtrar(filter, page);
 
@@ -53,6 +67,26 @@ public class LancamentoService {
 
 	public Page<ResumoLancamento> resumir(LancamentoFilter filter, Pageable page) {
 		Page<ResumoLancamento> lancamentos = lancamentoRepository.resumir(filter, page);
+
+		if (ObjectUtils.isEmpty(lancamentos)) {
+			throw new NotFoundException(this.NotFoundMessage());
+		}
+
+		return lancamentos;
+	}
+
+	public List<LancamentosPorCategoria> porCategoria(LocalDate data) {
+		List<LancamentosPorCategoria> lancamentos = lancamentoRepository.porCategoria(data);
+
+		if (ObjectUtils.isEmpty(lancamentos)) {
+			throw new NotFoundException(this.NotFoundMessage());
+		}
+
+		return lancamentos;
+	}
+
+	public List<LancamentosPorDia> porDia(LocalDate data) {
+		List<LancamentosPorDia> lancamentos = lancamentoRepository.porDia(data);
 
 		if (ObjectUtils.isEmpty(lancamentos)) {
 			throw new NotFoundException(this.NotFoundMessage());

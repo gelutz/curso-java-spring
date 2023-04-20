@@ -1,16 +1,22 @@
 package com.rsdata.algamoney.model;
 
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "pessoa")
@@ -28,6 +34,11 @@ public class Pessoa {
 
 	@Embedded
 	private Endereco endereco;
+
+	@JsonIgnoreProperties("pessoa")
+	@Valid
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Contato> contatos;
 
 	@Transient
 	public boolean isAtivo() {
@@ -64,6 +75,14 @@ public class Pessoa {
 
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public List<Contato> getContatos() {
+		return contatos;
+	}
+
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
 	}
 
 	@Override

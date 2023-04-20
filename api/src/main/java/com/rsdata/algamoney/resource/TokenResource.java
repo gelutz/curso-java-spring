@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rsdata.algamoney.config.property.ApiProperty;
+import com.rsdata.algamoney.config.ApiProperty;
 
 @RestController
 @RequestMapping("/tokens")

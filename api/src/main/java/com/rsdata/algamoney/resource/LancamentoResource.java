@@ -1,5 +1,10 @@
 package com.rsdata.algamoney.resource;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.FileSystems;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +25,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rsdata.algamoney.event.RecursoCriadoEvent;
 import com.rsdata.algamoney.model.Lancamento;
 import com.rsdata.algamoney.model.TipoLancamento;
 import com.rsdata.algamoney.repository.LancamentoRepository;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
+import com.rsdata.algamoney.repository.projection.LancamentosPorCategoria;
+import com.rsdata.algamoney.repository.projection.LancamentosPorDia;
 import com.rsdata.algamoney.repository.projection.ResumoLancamento;
 import com.rsdata.algamoney.service.LancamentoService;
 
@@ -79,6 +88,22 @@ public class LancamentoResource {
 		return ResponseEntity.ok(lancamento);
 	}
 
+	@GetMapping("/estatisticas/categoria")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+	public ResponseEntity<List<LancamentosPorCategoria>> porCategoria() {
+		List<LancamentosPorCategoria> lancamento = lancamentoService.porCategoria(LocalDate.now());
+
+		return ResponseEntity.ok(lancamento);
+	}
+
+	@GetMapping("/estatisticas/dia")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+	public ResponseEntity<List<LancamentosPorDia>> porDia() {
+		List<LancamentosPorDia> lancamento = lancamentoService.porDia(LocalDate.now());
+
+		return ResponseEntity.ok(lancamento);
+	}
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
@@ -90,6 +115,30 @@ public class LancamentoResource {
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, novoLancamento.getId()));
 
 		return ResponseEntity.ok(novoLancamento);
+	}
+
+	@PostMapping("/anexo")
+	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
+	public ResponseEntity<String> uploadArquivo(@RequestParam MultipartFile arquivo) throws IOException {
+		int random = (int) (Math.random() * 1000);
+		String path = FileSystems
+				.getDefault()
+				.getPath(".")
+				.toAbsolutePath()
+				.getParent() + "/src/main/resources/uploads/";
+
+		String nomeArquivoOriginal = arquivo.getOriginalFilename();
+		String nomeArquivo = nomeArquivoOriginal.substring(0, nomeArquivoOriginal.lastIndexOf('.'));
+		String extensaoArquivo = nomeArquivoOriginal.substring(nomeArquivoOriginal.lastIndexOf('.'));
+
+		OutputStream out = new FileOutputStream(
+				path + nomeArquivo + random + extensaoArquivo);
+
+		out.write(arquivo.getBytes());
+		out.close();
+
+		return ResponseEntity.ok("Upload bem sucedido.");
 	}
 
 	@PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.rsdata.algamoney.repository.lancamento;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import com.rsdata.algamoney.model.Lancamento;
 import com.rsdata.algamoney.model.Lancamento_;
 import com.rsdata.algamoney.model.Pessoa_;
 import com.rsdata.algamoney.repository.filter.LancamentoFilter;
+import com.rsdata.algamoney.repository.projection.LancamentosPorCategoria;
+import com.rsdata.algamoney.repository.projection.LancamentosPorDia;
 import com.rsdata.algamoney.repository.projection.ResumoLancamento;
 
 public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
@@ -67,6 +70,45 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		adicionarRestricoesDePaginacao(query, pageable);
 
 		return new PageImpl<>(query.getResultList(), pageable, total(lancamentoFilter));
+	}
+
+	@Override
+	public List<LancamentosPorCategoria> porCategoria(LocalDate dataRef) {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<LancamentosPorCategoria> query = builder.createQuery(LancamentosPorCategoria.class);
+		Root<Lancamento> root = query.from(Lancamento.class);
+
+		query.select(builder.construct(LancamentosPorCategoria.class,
+				root.get(Lancamento_.categoria),
+				builder.sum(root.get(Lancamento_.valor))));
+
+		LocalDate primeiroDia = dataRef.withDayOfMonth(1);
+		LocalDate ultimoDia = dataRef.withDayOfMonth(dataRef.lengthOfMonth());
+
+		query.where(builder.between(root.get(Lancamento_.dataVencimento), primeiroDia, ultimoDia));
+		query.groupBy(root.get(Lancamento_.categoria));
+
+		return em.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<LancamentosPorDia> porDia(LocalDate dataRef) {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<LancamentosPorDia> query = builder.createQuery(LancamentosPorDia.class);
+		Root<Lancamento> root = query.from(Lancamento.class);
+
+		query.select(builder.construct(LancamentosPorDia.class,
+				root.get(Lancamento_.tipo),
+				root.get(Lancamento_.dataVencimento),
+				builder.sum(root.get(Lancamento_.valor))));
+
+		LocalDate primeiroDia = dataRef.withDayOfMonth(1);
+		LocalDate ultimoDia = dataRef.withDayOfMonth(dataRef.lengthOfMonth());
+
+		query.where(builder.between(root.get(Lancamento_.dataVencimento), primeiroDia, ultimoDia));
+		query.groupBy(root.get(Lancamento_.dataVencimento), root.get(Lancamento_.tipo));
+
+		return em.createQuery(query).getResultList();
 	}
 
 	private Long total(LancamentoFilter filter) {
