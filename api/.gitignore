@@ -34,3 +34,5 @@ build/
 
 *.old
 *.log
+
+./src/resources/uploads/*
