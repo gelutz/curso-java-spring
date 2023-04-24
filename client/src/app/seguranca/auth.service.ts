@@ -49,7 +49,7 @@ export class AuthService {
 					}
 
 					this.messageService.add({ severity: "success", detail: "Login bem sucedido." })
-					this.router.navigate(["/lancamentos"])
+
 					resolve()
 				},
 				error: (error) => {
@@ -62,7 +62,6 @@ export class AuthService {
 	logout(): void {
 		localStorage.removeItem(environment.jwtLocalStorageKey)
 		this.jwtPayload = {} as JwtPayload
-		this.router.navigate(["/login"])
 	}
 
 	renovarAccessToken(): Promise<void> {
