@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { environment } from "src/environments/environment"
-import { LancamentoDTO } from "../@types/LancamentoDTO"
-import { LancamentoFiltro } from "../@types/LancamentoFiltro"
-import { Pageable } from "../@types/Pageable"
-import { TipoLancamentoDTO } from "../@types/TipoLancamentoDTO"
+import { LancamentoDTO } from "../@types/dtos/LancamentoDTO"
+import { TipoLancamentoDTO } from "../@types/dtos/TipoLancamentoDTO"
+import { LancamentoFiltro } from "../@types/filtros/LancamentoFiltro"
+import { Pageable } from "../@types/filtros/Pageable"
 
 @Injectable({
 	providedIn: "root",

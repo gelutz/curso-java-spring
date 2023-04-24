@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core"
-import { LineChartData, PieChartData } from "src/app/@types/ChartConfig"
+import { LineChartData, PieChartData } from "../../@types/ChartConfig"
 import { DashboardService } from "../dashboard.service"
 
 @Component({

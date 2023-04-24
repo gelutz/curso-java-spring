@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { environment } from "src/environments/environment"
-import { Pageable } from "../@types/Pageable"
-import { PessoaDTO } from "../@types/PessoaDTO"
-import { PessoaFiltro } from "../@types/PessoaFiltro"
+import { PessoaDTO } from "../@types/dtos/PessoaDTO"
+import { Pageable } from "../@types/filtros/Pageable"
+import { PessoaFiltro } from "../@types/filtros/PessoaFiltro"
 
 @Injectable({
 	providedIn: "root",

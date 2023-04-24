@@ -1,8 +1,8 @@
 import { HttpEvent, HttpHandler, HttpRequest } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { Observable, from, mergeMap } from "rxjs"
-import { JwtResponse } from "src/app/@types/JwtResponse"
 import { environment } from "src/environments/environment"
+import { JwtResponse } from "../../@types/JwtResponse"
 import { AuthService } from "../auth.service"
 
 type InterceptReturn = Observable<HttpEvent<JwtResponse>>

@@ -56,6 +56,16 @@
     </div>
 
     <div class="col-12">
+      <p-panel header="Contatos">
+        <div class="gird">
+          <div class="col-12">
+            <p-table [value]="pessoa.contatos || []"></p-table>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+
+    <div class="col-12">
       <button class="end-buttons" pButton type="submit">Salvar</button>
       <button pButton class="end-buttons" routerLink="/pessoas">Voltar para a pesquisa</button>
     </div>

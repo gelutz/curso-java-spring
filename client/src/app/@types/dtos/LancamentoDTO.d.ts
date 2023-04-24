@@ -1,4 +1,4 @@
-import { CategoriaDTO } from "src/app/@types/dtos/CategoriaDTO"
+import { CategoriaDTO } from "./CategoriaDTO"
 import { PessoaDTO } from "./PessoaDTO"
 import { TipoLancamentoDTO } from "./TipoLancamentoDTO"
 
