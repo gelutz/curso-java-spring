@@ -1,3 +1,4 @@
+import { ContatoDTO } from "./ContatoDTO"
 import { EnderecoDTO } from "./EnderecoDTO"
 
 export type PessoaDTO = {
@@ -5,4 +6,5 @@ export type PessoaDTO = {
 	nome?: string
 	ativo?: boolean
 	endereco?: EnderecoDTO
+	contatos?: ContatoDTO[]
 }
