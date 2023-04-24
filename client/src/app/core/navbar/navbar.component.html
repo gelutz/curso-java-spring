@@ -7,17 +7,20 @@
   <ul class="navbar-menu">
 
     <li class="item item-user">{{ authService.jwtPayload?.nome }}</li>
-    <li *ngIf="authService.temPermissao('ROLE_PESQUISAR_LANCAMENTO')" class="item" routerLinkActive="ativo"
-      routerLink="/lancamentos">
+    <li routerLink="/dashboard" *ngIf="authService.temPermissao('ROLE_PESQUISAR_LANCAMENTO')" class="item" routerLinkActive="ativo">
+      <a>Dashboard</a>
+    </li>
+    <li routerLink="/lancamentos" *ngIf="authService.temPermissao('ROLE_PESQUISAR_LANCAMENTO')" class="item" routerLinkActive="ativo">
       <a>Lançamentos</a>
     </li>
-    <li *ngIf="authService.temPermissao('ROLE_PESQUISAR_PESSOA')" class="item" routerLinkActive="ativo"
-      routerLink="/pessoas">
+    <li routerLink="/pessoas" *ngIf="authService.temPermissao('ROLE_PESQUISAR_PESSOA')" class="item" routerLinkActive="ativo">
       <a>Pessoas</a>
     </li>
+    <!-- <li routerLink="/pessoas" *ngIf="authService.temPermissao('ROLE_PESQUISAR_PESSOA')" class="item" routerLinkActive="ativo">
+      <a>Pessoas</a>
+    </li> -->
     <li class="item">
-      <a (click)="authService.logout()" >{{ authService.jwtPayload ? 'Logout' :
-        'Login' }}</a>
+      <a (click)="logout()" >Logout</a>
     </li>
   </ul>
 </div>

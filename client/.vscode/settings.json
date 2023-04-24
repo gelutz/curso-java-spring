@@ -5,5 +5,8 @@
     "editor.formatOnType": false,
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
+  },
+  "[html]":{
+    // "editor.defaultFormatter": ""
   }
 }
