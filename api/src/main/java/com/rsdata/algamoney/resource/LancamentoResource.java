@@ -40,6 +40,8 @@ import com.rsdata.algamoney.repository.projection.LancamentosPorDia;
 import com.rsdata.algamoney.repository.projection.ResumoLancamento;
 import com.rsdata.algamoney.service.LancamentoService;
 
+import net.minidev.json.JSONObject;
+
 @RestController
 @RequestMapping("/lancamentos")
 public class LancamentoResource {
@@ -118,27 +120,30 @@ public class LancamentoResource {
 	}
 
 	@PostMapping("/anexo")
-	@ResponseStatus(HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
 	public ResponseEntity<String> uploadArquivo(@RequestParam MultipartFile arquivo) throws IOException {
 		int random = (int) (Math.random() * 1000);
+		String systemPath = "/src/main/resources/uploads/";
 		String path = FileSystems
 				.getDefault()
 				.getPath(".")
 				.toAbsolutePath()
-				.getParent() + "/src/main/resources/uploads/";
+				.getParent() + systemPath;
 
 		String nomeArquivoOriginal = arquivo.getOriginalFilename();
 		String nomeArquivo = nomeArquivoOriginal.substring(0, nomeArquivoOriginal.lastIndexOf('.'));
 		String extensaoArquivo = nomeArquivoOriginal.substring(nomeArquivoOriginal.lastIndexOf('.'));
 
-		OutputStream out = new FileOutputStream(
-				path + nomeArquivo + random + extensaoArquivo);
+		String novoArquivo = nomeArquivo + random + extensaoArquivo;
+		OutputStream out = new FileOutputStream(path + novoArquivo);
 
 		out.write(arquivo.getBytes());
 		out.close();
 
-		return ResponseEntity.ok("Upload bem sucedido.");
+		JSONObject json = new JSONObject();
+		json.put("nome", novoArquivo);
+
+		return ResponseEntity.status(201).body(json.toString());
 	}
 
 	@PutMapping("/{id}")

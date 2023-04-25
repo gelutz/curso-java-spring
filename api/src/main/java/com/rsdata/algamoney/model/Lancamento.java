@@ -51,6 +51,15 @@ public class Lancamento {
 	private Pessoa pessoa;
 
 	private String observacao;
+	private String arquivo;
+
+	public String getArquivo() {
+		return arquivo;
+	}
+
+	public void setArquivo(String arquivo) {
+		this.arquivo = arquivo;
+	}
 
 	public Long getId() {
 		return this.id;

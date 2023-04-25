@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
-@SuppressWarnings("deprecation")
 @Profile("oauth-security")
 @Configuration
 @EnableWebSecurity
@@ -37,6 +36,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 				.antMatchers("/categorias").permitAll()
+				.antMatchers("/uploads").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
