@@ -5,14 +5,22 @@ import { LancamentoDTO } from "../@types/dtos/LancamentoDTO"
 import { TipoLancamentoDTO } from "../@types/dtos/TipoLancamentoDTO"
 import { LancamentoFiltro } from "../@types/filtros/LancamentoFiltro"
 import { Pageable } from "../@types/filtros/Pageable"
+import { AuthService } from "../seguranca/auth.service"
 
 @Injectable({
 	providedIn: "root",
 })
 export class LancamentoService {
 	baseUrl = `${environment.baseUrl}/lancamentos`
-	headers = new HttpHeaders().append("Content-Type", "application/json")
-	constructor(private http: HttpClient) {}
+	JSONheaders = new HttpHeaders().append("Content-Type", "application/json")
+
+
+	uploadHeaders = new HttpHeaders().append(
+		"Authorization",
+		`Bearer ${localStorage.getItem(environment.jwtLocalStorageKey)}`
+	)
+
+	constructor(private http: HttpClient, private auth: AuthService) {}
 
 	async buscarTipos(): Promise<TipoLancamentoDTO[]> {
 		const url = `${this.baseUrl}/tipos`
@@ -33,7 +41,7 @@ export class LancamentoService {
 		const url = `${this.baseUrl}/${id}`
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.get<LancamentoDTO>(url, { headers: this.headers })
+			const returned = this.http.get<LancamentoDTO>(url, { headers: this.JSONheaders })
 
 			returned.subscribe({
 				next: resolve,
@@ -53,7 +61,10 @@ export class LancamentoService {
 		if (filtro.vencimentoAte) params = params.set("vencimentoAte", filtro.vencimentoAte || "")
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.get<Pageable<LancamentoDTO[]>>(url, { headers: this.headers, params })
+			const returned = this.http.get<Pageable<LancamentoDTO[]>>(url, {
+				headers: this.JSONheaders,
+				params,
+			})
 
 			returned.subscribe({
 				next: resolve,
@@ -67,7 +78,7 @@ export class LancamentoService {
 
 		return new Promise((resolve, reject) => {
 			const returned = this.http.post<LancamentoDTO>(url, JSON.stringify(lancamento), {
-				headers: this.headers,
+				headers: this.JSONheaders,
 			})
 
 			returned.subscribe({
@@ -83,7 +94,7 @@ export class LancamentoService {
 		const url = `${this.baseUrl}/${lancamento.id}`
 		return new Promise((resolve, reject) => {
 			const returned = this.http.put<LancamentoDTO>(url, JSON.stringify(lancamento), {
-				headers: this.headers,
+				headers: this.JSONheaders,
 			})
 
 			returned.subscribe({
@@ -97,7 +108,7 @@ export class LancamentoService {
 		const url = `${this.baseUrl}/${id}`
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.delete<Pageable<LancamentoDTO>>(url, { headers: this.headers })
+			const returned = this.http.delete<Pageable<LancamentoDTO>>(url, { headers: this.JSONheaders })
 
 			returned.subscribe({
 				next: () => resolve(),

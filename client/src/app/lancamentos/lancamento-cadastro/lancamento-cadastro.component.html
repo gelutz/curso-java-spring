@@ -1,69 +1,144 @@
 <div class="container">
-  <form class="toda-table" [formGroup]="form" (ngSubmit)="this.isEdicao() ? atualizar() : salvar()">
-    <div class="grid">
-      <div class="col-12">
-        <h1>{{ (id !== null ? 'Novo' : 'Edição de ') + ' Lançamento'}}</h1>
-      </div>
-    </div>
+	<form class="toda-table" [formGroup]="form" (ngSubmit)="this.isEdicao() ? atualizar() : salvar()">
+		<div class="grid">
+			<div class="col-12">
+				<h1>{{ (id !== null ? "Novo" : "Edição de ") + " Lançamento" }}</h1>
+			</div>
+		</div>
 
-    <div class="col-12">
-      <label for="tipo">Tipo de lançamento</label>
-      <p-selectButton required formControlName="tipo" name="tipo" [options]="tipos || []"
-        ></p-selectButton>
-      <app-mensagem-erro [control]="form.get('tipo')" mensagem="Necessário escolher algum valor!"
-        erro="required"></app-mensagem-erro>
-    </div>
+		<div class="col-12">
+			<label for="tipo">Tipo de lançamento</label>
+			<p-selectButton
+				required
+				formControlName="tipo"
+				name="tipo"
+				[options]="tipos || []"
+			></p-selectButton>
+			<app-mensagem-erro
+				[control]="form.get('tipo')"
+				mensagem="Necessário escolher algum valor!"
+				erro="required"
+			></app-mensagem-erro>
+		</div>
 
-    <div class="p-fluid block md:flex">
-      <div class="col-12 md:col-6 p-fluid">
-        <label for="">Vencimento</label>
-        <p-calendar name="vencimento" formControlName="dataVencimento"
-          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"></p-calendar>
-      </div>
-      <div class="col-12 md:col-6 p-fluid">
-        <label for="">{{ form.get('tipo')?.value == 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
-        <p-calendar formControlName="dataPagamento" name="recebimento"
-          [dateFormat]="'dd/mm/yy'" [showIcon]="true" [readonlyInput]="true" [inline]="false"></p-calendar>
-        <p-message severity="error" text="Necessário selecionar uma data de recebimento/pagamento!"
-          *ngIf="form.get('dataPagamento')?.touched && form.get('tipo')?.invalid"></p-message>
-      </div>
-    </div>
-    <div class="p-fluid block md:flex">
-      <div class="col-12 md:col-6 p-fluid ">
-        <label class="block" for="">Descrição</label>
-        <input name="descricao" formControlName="descricao"  pInputText type="text" required
-          minlength="5">
-        <app-mensagem-erro [control]="form.get('descricao')" [dirty]="true" mensagem="Necessário preencher uma pequena descrição!"
-          erro="required"></app-mensagem-erro>
-        <app-mensagem-erro [control]="form.get('descricao')"
-          mensagem="O campo deve ter no mínimo {{ form.get('descricao')?.errors?.['minlength']?.requiredLength }} caracteres!"
-          erro="minlength"></app-mensagem-erro>
-      </div>
-      <div class="col-12 md:col-6 p-fluid ">
-        <label class="block" for="">Valor</label>
-        <p-inputNumber name="valor" formControlName="valor"  mode="currency" currency="BRL"></p-inputNumber>
-        <app-mensagem-erro [control]="form.get('valor')" mensagem="Necessário preencher o valor!"
-          erro="required"></app-mensagem-erro>
+		<div class="p-fluid block md:flex">
+			<div class="col-12 md:col-6 p-fluid">
+				<label for="">Vencimento</label>
+				<p-calendar
+					name="vencimento"
+					formControlName="dataVencimento"
+					[dateFormat]="'dd/mm/yy'"
+					[showIcon]="true"
+					[readonlyInput]="true"
+					[inline]="false"
+				></p-calendar>
+			</div>
+			<div class="col-12 md:col-6 p-fluid">
+				<label for="">{{ form.get("tipo")?.value == "RECEITA" ? "Recebimento" : "Pagamento" }}</label>
+				<p-calendar
+					formControlName="dataPagamento"
+					name="recebimento"
+					[dateFormat]="'dd/mm/yy'"
+					[showIcon]="true"
+					[readonlyInput]="true"
+					[inline]="false"
+				></p-calendar>
+				<p-message
+					severity="error"
+					text="Necessário selecionar uma data de recebimento/pagamento!"
+					*ngIf="form.get('dataPagamento')?.touched && form.get('tipo')?.invalid"
+				></p-message>
+			</div>
+		</div>
 
-      </div>
-    </div>
-    <div class="p-fluid block md:flex">
-      <div class="col-12 md:col-6 p-fluid" formGroupName="categoria">
-        <label class="block" for="">Categoria</label>
-        <p-dropdown formControlName="id"  name="categoria" [options]="categorias || []"></p-dropdown>
-      </div>
-      <div class="col-12 md:col-6 p-fluid" formGroupName="pessoa">
-        <label class="block" for="">Pessoa</label>
-        <p-dropdown formControlName="id" name="pessoa" [options]="pessoas || []"></p-dropdown>
-      </div>
-    </div>
-    <div class="col-12 p-fluid ">
-      <label class="block" for="">Observação</label>
-      <textarea formControlName="observacao" pInputText rows=" 3" name="observacao"></textarea>
-    </div>
-    <div class="col-12">
-      <button class="end-buttons" pButton type="submit">Salvar</button>
-      <button class="end-buttons" pButton routerLink="/lancamentos">Voltar para a pesquisa</button>
-    </div>
-  </form>
+		<div class="p-fluid block md:flex">
+			<div class="col-12 md:col-6 p-fluid">
+				<label class="block" for="">Descrição</label>
+				<input
+					name="descricao"
+					formControlName="descricao"
+					pInputText
+					type="text"
+					required
+					minlength="5"
+				/>
+				<app-mensagem-erro
+					[control]="form.get('descricao')"
+					[dirty]="true"
+					mensagem="Necessário preencher uma pequena descrição!"
+					erro="required"
+				></app-mensagem-erro>
+				<app-mensagem-erro
+					[control]="form.get('descricao')"
+					mensagem="O campo deve ter no mínimo {{ form.get('descricao')?.errors?.['minlength']?.requiredLength }} caracteres!"
+					erro="minlength"
+				></app-mensagem-erro>
+			</div>
+
+			<div class="col-12 md:col-6 p-fluid">
+				<label class="block" for="">Valor</label>
+				<p-inputNumber
+					name="valor"
+					formControlName="valor"
+					mode="currency"
+					currency="BRL"
+				></p-inputNumber>
+				<app-mensagem-erro
+					[control]="form.get('valor')"
+					mensagem="Necessário preencher o valor!"
+					erro="required"
+				></app-mensagem-erro>
+			</div>
+		</div>
+
+		<div class="p-fluid block md:flex">
+			<div class="col-12 md:col-6 p-fluid" formGroupName="categoria">
+				<label class="block" for="">Categoria</label>
+				<p-dropdown formControlName="id" name="categoria" [options]="categorias || []"></p-dropdown>
+			</div>
+			<div class="col-12 md:col-6 p-fluid" formGroupName="pessoa">
+				<label class="block" for="">Pessoa</label>
+				<p-dropdown formControlName="id" name="pessoa" [options]="pessoas || []"></p-dropdown>
+			</div>
+		</div>
+
+		<div class="col-12 p-fluid">
+			<label class="block" for="">Observação</label>
+			<textarea formControlName="observacao" pInputText rows=" 3" name="observacao"></textarea>
+		</div>
+
+		<div class="col-4 p-fluid flex">
+			<p-fileUpload
+				*ngIf="!form.get('arquivo')?.value"
+				name="arquivo"
+				mode="basic"
+				[auto]="true"
+				[maxFileSize]="500000"
+				chooseLabel="Anexar"
+				accept="image/*, text/*"
+				[headers]="uploadHeaders"
+				[url]="urlUpload"
+				(onBeforeUpload)="antesDoUpload()"
+				(onUpload)="aoTerminarUpload($event)"
+				(onError)="uploadErrorHandler($event)"
+				[hidden]="fazendoUpload"
+			></p-fileUpload>
+			<a class="flex" *ngIf="form.get('arquivo')" target="_blank" [pTooltip]="'Baixar anexo'">
+				<span class="align-items-center flex mr-2">{{ form.get("arquivo")?.value }}</span>
+				<!-- [href]="form.get('pathArquivo')?.value" -->
+			</a>
+			<p-progressSpinner
+				styleClass="w-3rem h-3rem"
+				[strokeWidth]="'.4em'"
+				fill="var(--primary-color)"
+				[hidden]="!fazendoUpload"
+			></p-progressSpinner>
+			<button *ngIf="form.get('arquivo')?.value" pButton icon="pi pi-times" (click)="removerArquivo()" type="button"></button>
+		</div>
+
+		<div class="col-12">
+			<button [disabled]="fazendoUpload" class="end-buttons" pButton type="submit">Salvar</button>
+			<button class="end-buttons" pButton routerLink="/lancamentos">Voltar para a pesquisa</button>
+		</div>
+	</form>
 </div>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import { Title } from "@angular/platform-browser"
 import { ActivatedRoute, Router } from "@angular/router"
 import { MessageService } from "primeng/api"
+import { environment } from "src/environments/environment"
 import { CategoriaService } from "../../categorias/categorias.service"
 import { ErrorHandlerService } from "../../core/services/error-handler.service"
 import { capitalize } from "../../core/utils/Capitalize"
@@ -28,6 +29,11 @@ export class LancamentoCadastroComponent {
 	tipos?: SelectOptions[]
 	categorias?: SelectOptions[]
 	pessoas?: SelectOptions[]
+
+	arquivo = ""
+	pathArquivo = ""
+	urlUpload = `${environment.baseUrl}/lancamentos/anexo`
+	fazendoUpload = false
 
 	constructor(
 		private lancamentoService: LancamentoService,
@@ -91,13 +97,13 @@ export class LancamentoCadastroComponent {
 
 	configurarFormulario() {
 		this.form = this.formBuilder.group({
-			id: [null],
+			id: [],
 			tipo: ["RECEITA", Validators.required],
 			descricao: [null, [Validators.required, Validators.minLength(5)]],
 			dataVencimento: [null, Validators.required],
 			dataPagamento: [null, Validators.required],
 			valor: [null, Validators.required],
-			observacao: [null],
+			observacao: [],
 			categoria: this.formBuilder.group({
 				id: [null, Validators.required],
 				nome: [],
@@ -106,6 +112,7 @@ export class LancamentoCadastroComponent {
 				id: [null, Validators.required],
 				nome: [],
 			}),
+			arquivo: []
 		})
 	}
 
@@ -130,11 +137,13 @@ export class LancamentoCadastroComponent {
 				severity: "success",
 				detail: `Lançamento #${newLancamento.id} criado!`,
 			})
+
 		} catch (error) {
 			this.errorHandler.handle(error)
 		}
 
-		this.router.navigate(["/lancamentos/novo"])
+		this.router.navigate(["/lancamentos"])
+
 	}
 
 	protected async atualizar(): Promise<void> {
@@ -148,6 +157,37 @@ export class LancamentoCadastroComponent {
 			this.errorHandler.handle(error)
 		}
 
-		this.router.navigate(["/lancamentos/novo"])
+		this.router.navigate(["/lancamentos"])
 	}
+
+	get uploadHeaders() {
+		return this.lancamentoService.uploadHeaders
+	}
+
+	antesDoUpload(){
+		this.fazendoUpload = true
+	}
+
+	aoTerminarUpload(event: any) {
+		setTimeout(() => {
+			this.fazendoUpload = false
+			const arquivo = event.originalEvent.body;
+
+			this.form.patchValue({
+				arquivo: arquivo.nome,
+			});
+		}, 3000);
+	}
+
+	uploadErrorHandler(event: any) {
+		this.errorHandler.handle(event)
+	}
+
+	removerArquivo() {
+		this.arquivo = ""
+		this.form.patchValue({
+			arquivo: ""
+		})
+	}
+
 }

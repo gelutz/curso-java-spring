@@ -82,6 +82,7 @@ export class AuthService {
 					if (error?.error?.error == "invalid_token") {
 						console.log("~ error:", error)
 						error = new AuthError("Sessão expirada, favor fazer login novamente")
+						this.logout()
 					}
 					this.errorHandler.handle(error)
 				},
