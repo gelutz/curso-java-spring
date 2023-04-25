@@ -13,6 +13,8 @@ export class OpenCloseButtonComponent {
 	@Input() activeIcon = ""
 	@Input() inactiveIcon = ""
 
+	@Input() id = ""
+
 	@Output() clicado = new EventEmitter<boolean>()
 
 	toggle(): void {

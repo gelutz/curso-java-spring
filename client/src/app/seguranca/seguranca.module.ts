@@ -11,7 +11,7 @@ import { RefreshTokenInterceptor } from "./interceptors/RefreshToken.interceptor
 import { LoginComponent } from "./login/login.component"
 
 export function tokenGetter(): string {
-	return localStorage.getItem(environment.jwtLocalStorageKey) ?? ""
+	return localStorage.getItem(environment.jwtLocalStorageKey) || ""
 }
 
 @NgModule({

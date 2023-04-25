@@ -9,7 +9,7 @@ import { PessoaFiltro } from "../@types/filtros/PessoaFiltro"
 	providedIn: "root",
 })
 export class PessoaService {
-	headers = new HttpHeaders().append("Authorization", `Basic ${environment.auth.basic}`)
+	headers = new HttpHeaders().append("Content-Type", "application/json")
 
 	baseUrl = `${environment.baseUrl}/pessoas`
 	constructor(private http: HttpClient) {}
@@ -22,17 +22,30 @@ export class PessoaService {
 		return pessoas
 	}
 
-	async pesquisar(filtro: PessoaFiltro): Promise<Pageable<PessoaDTO[]>> {
-		const url = `${this.baseUrl}`
+	async buscarPorID(id: number): Promise<PessoaDTO> {
+		const url = `${this.baseUrl}/${id}`
+		return new Promise((resolve, reject) => {
+			const returned = this.http.get<PessoaDTO>(url)
 
+			returned.subscribe({
+				next: resolve,
+				error: reject,
+			})
+		})
+	}
+
+	async pesquisar(filtro: PessoaFiltro): Promise<Pageable<PessoaDTO[]>> {
 		let params = new HttpParams().set("page", `${filtro.pagina}`).set("size", `${filtro.itensPorPagina}`)
 
 		Object.entries(filtro).forEach(([prop, value]) => {
-			params = params.set(prop, value ?? "")
+			params = params.set(prop, value || "")
 		})
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.get<Pageable<PessoaDTO[]>>(url, { headers: this.headers, params })
+			const returned = this.http.get<Pageable<PessoaDTO[]>>(this.baseUrl, {
+				headers: this.headers,
+				params,
+			})
 
 			returned.subscribe({
 				next: resolve,
@@ -47,7 +60,20 @@ export class PessoaService {
 		pessoa.ativo = true
 
 		return new Promise((resolve, reject) => {
-			const returned = this.http.post<PessoaDTO>(url, JSON.stringify(pessoa))
+			const returned = this.http.post<PessoaDTO>(url, JSON.stringify(pessoa), { headers: this.headers })
+
+			returned.subscribe({
+				next: resolve,
+				error: reject,
+			})
+		})
+	}
+
+	async atualizar(pessoa: PessoaDTO): Promise<PessoaDTO> {
+		const url = `${this.baseUrl}/${pessoa.id}`
+
+		return new Promise((resolve, reject) => {
+			const returned = this.http.put<PessoaDTO>(url, JSON.stringify(pessoa), { headers: this.headers })
 
 			returned.subscribe({
 				next: resolve,

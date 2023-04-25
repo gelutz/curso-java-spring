@@ -1,3 +1,11 @@
 .end-buttons {
 	margin-right: .5em;
 }
+
+.col-acoes {
+  text-align: center;
+}
+
+.col-acoes a {
+  margin-right: .2em;
+}

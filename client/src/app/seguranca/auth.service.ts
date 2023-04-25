@@ -47,7 +47,7 @@ export class AuthService {
 						this.jwtPayload = this.decodeToken(resposta.access_token)
 						this.armazenarToken(resposta)
 					}
-
+					console.log("~ login bem sucedido:")
 					this.messageService.add({ severity: "success", detail: "Login bem sucedido." })
 
 					resolve()
@@ -80,6 +80,7 @@ export class AuthService {
 				},
 				error: (error) => {
 					if (error?.error?.error == "invalid_token") {
+						console.log("~ error:", error)
 						error = new AuthError("Sessão expirada, favor fazer login novamente")
 					}
 					this.errorHandler.handle(error)
@@ -95,7 +96,7 @@ export class AuthService {
 
 	private getDecodedToken(): JwtPayload {
 		const token = localStorage.getItem(environment.jwtLocalStorageKey)
-		return this.decodeToken(token ?? "")
+		return this.decodeToken(token || "")
 	}
 
 	private armazenarToken(resposta: JwtResponse): void {
@@ -104,7 +105,7 @@ export class AuthService {
 	}
 
 	private decodeToken(token: string): JwtPayload {
-		return (this.jwtHelper.decodeToken(token) ?? {}) as JwtPayload
+		return (this.jwtHelper.decodeToken(token) || {}) as JwtPayload
 	}
 
 	temPermissao(permissao: string): boolean {

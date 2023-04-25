@@ -1,19 +1,33 @@
-import { Component } from "@angular/core"
+import { Component, ViewChild } from "@angular/core"
 import { Title } from "@angular/platform-browser"
 import { ActivatedRoute, Router } from "@angular/router"
-import { MessageService } from "primeng/api"
-import { ErrorHandlerService } from "src/app/core/services/error-handler.service"
-import { PessoaDTO } from "../../@types/dtos/PessoaDTO"
+import { ConfirmationService, MessageService } from "primeng/api"
+import { Table } from "primeng/table"
+import { ContatoDTO } from "src/app/@types/dtos/ContatoDTO"
+import { EnderecoDTO } from "../../@types/dtos/EnderecoDTO"
+import { ErrorHandlerService } from "../../core/services/error-handler.service"
 import { PessoaService } from "../pessoa.service"
 
 class Pessoa {
+	id?: number
 	nome = ""
-	endereco = {
-		logradouro: "",
+	ativo = true
+	endereco: EnderecoDTO = {
+		estado: "",
+		cidade: "",
 		bairro: "",
 		cep: "",
+		logradouro: "",
 		complemento: "",
 	}
+	contatos: ContatoDTO[] = []
+}
+
+class Contato {
+	id?: number
+	nome = ""
+	email = ""
+	telefone = ""
 }
 
 @Component({
@@ -22,8 +36,13 @@ class Pessoa {
 	styleUrls: ["./pessoa-cadastro.component.css"],
 })
 export class PessoaCadastroComponent {
+	@ViewChild(Table) private tabela!: Table
+
 	id: string | number = 0
-	pessoa = new Pessoa() as PessoaDTO
+	pessoa = new Pessoa()
+	contato = new Contato()
+	exbindoFormularioContato = false
+	editandoContato = false
 
 	constructor(
 		private pessoaService: PessoaService,
@@ -31,12 +50,23 @@ export class PessoaCadastroComponent {
 		private messageService: MessageService,
 		private route: ActivatedRoute,
 		private router: Router,
-		private title: Title
+		private title: Title,
+		private confirmationService: ConfirmationService
 	) {}
+	protected isEdicao = (): boolean => !(!(this.id != undefined) || !(this.id != "novo"))
 
-	ngOnInit(): void {
+	async ngOnInit(): Promise<void> {
 		this.id = this.route.snapshot.params["id"]
+
+		if (this.isEdicao()) {
+			await this.carregarPessoas()
+		}
+
 		this.atualizarTitulo()
+	}
+
+	protected getIndexContatoByID = (id: number): number => {
+		return this.pessoa.contatos.indexOf(this.pessoa.contatos.filter((contato) => contato.id === id)[0])
 	}
 
 	atualizarTitulo(): void {
@@ -44,9 +74,19 @@ export class PessoaCadastroComponent {
 		this.title.setTitle(title)
 	}
 
-	// equivale a (this.id != undefined) && (this.id != 'novo')
-	// mas a expressão acima não funciona no TS
-	private isEdicao = (): boolean => !(!(this.id != undefined) || !(this.id != "novo"))
+	async carregarPessoas(): Promise<void> {
+		try {
+			const pessoa = await this.pessoaService.buscarPorID(this.id as number)
+			if (pessoa == null) {
+				this.router.navigate(["/pessoas"])
+				return
+			}
+
+			Object.assign(this.pessoa, pessoa)
+		} catch (error) {
+			this.errorHandler.handle(error)
+		}
+	}
 
 	async salvar(): Promise<void> {
 		const pessoa = this.pessoa
@@ -60,5 +100,83 @@ export class PessoaCadastroComponent {
 		}
 
 		this.router.navigate(["/pessoas"])
+	}
+
+	async atualizar(): Promise<void> {
+		try {
+			await this.pessoaService.atualizar(this.pessoa)
+			this.messageService.add({
+				severity: "success",
+				detail: `Pessoa #${this.id} atualizada!`,
+			})
+		} catch (error) {
+			this.errorHandler.handle(error)
+		}
+
+		this.router.navigate(["/pessoas/novo"])
+	}
+
+	async excluir(id: number): Promise<void> {
+		try {
+			await this.pessoaService.excluir(id)
+		} catch (e) {
+			this.errorHandler.handle(e)
+			return
+		}
+
+		this.tabela.reset()
+		this.messageService.add({ severity: "success", detail: "Pessoa excluída com sucesso!" })
+	}
+
+	async mudarAtivo(id: number, currentState: boolean): Promise<void> {
+		try {
+			await this.pessoaService.mudarAtivo(id, currentState)
+		} catch (e) {
+			this.errorHandler.handle(e)
+			return
+		}
+
+		this.tabela.reset()
+
+		this.messageService.add({
+			severity: "success",
+			detail: `Pessoa ${currentState ? "desativada" : "ativada"} com sucesso!`,
+		})
+	}
+
+	confirmarExclusao(id: number): void {
+		this.confirmationService.confirm({
+			message: "Deseja excluir a Pessoa?",
+			accept: async () => await this.excluir(id),
+		})
+	}
+
+	abrirModalContato = () => (this.exbindoFormularioContato = true)
+	fecharModalContato = () => {
+		this.exbindoFormularioContato = false
+		this.editandoContato = false
+	}
+
+	editarContato(contato: Contato) {
+		this.editandoContato = true
+		this.abrirModalContato()
+		this.contato = { ...contato }
+	}
+
+	salvarContato(id?: number): void {
+		if (id) {
+			const index = this.getIndexContatoByID(id)
+			this.pessoa.contatos[index] = this.contato
+		} else {
+			this.pessoa.contatos?.push(this.contato)
+		}
+
+		this.fecharModalContato()
+		this.contato = new Contato()
+	}
+
+	excluirContato(id: number): void {
+		const index = this.getIndexContatoByID(id)
+		this.pessoa.contatos.splice(index, 1)
 	}
 }

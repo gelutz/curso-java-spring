@@ -26,16 +26,28 @@ export class AuthGuard implements CanActivate {
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): GuardResponse {
 		let roles = route.data["roles"] as string[]
 
-		roles = roles.filter((role) => {
-			return this.authService.temPermissao(role)
-		})
+		if (this.authService.isTokenExpired()) {
+			console.log("Navegação com access token inválido. Obtendo novo token...")
 
-		if (roles.length == 0) {
-			this.messageService.add({ severity: "error", detail: "Acesso negado." })
-			this.router.navigate(["/login"])
-			return false
+			return this.authService.renovarAccessToken().then(() => {
+				if (this.authService.isTokenExpired()) {
+					this.router.navigate(["/login"])
+					return false
+				}
+
+				return true
+			})
+		} else {
+			roles = roles.filter((role) => {
+				return this.authService.temPermissao(role)
+			})
+
+			if (roles.length == 0) {
+				this.messageService.add({ severity: "error", detail: "Acesso negado." })
+				this.router.navigate(["/login"])
+				return false
+			}
+			return true
 		}
-
-		return true
 	}
 }

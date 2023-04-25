@@ -46,35 +46,34 @@
             <th class="col-data-header">Vencimento</th>
             <th class="col-data-header">Pagamento</th>
             <th class="col-valor-header">Valor</th>
-            <th class="col-valor-header"></th>
+            <th class="col-valor-header">Editar/Excluir</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-lancamento>
           <tr>
             <td>
-              <span class="p-column-title">Pessoa</span>
+              <!-- <span class="p-column-title">Pessoa</span> -->
               {{ lancamento.pessoa?.nome }}
             </td>
             <td>
-              <span class="p-column-title">Descrição</span>
+              <!-- <span class="p-column-title">Descrição</span> -->
               {{ lancamento.descricao }}
             </td>
             <td class="col-data">
-              <span class="p-column-title">Vencimento</span>
+              <!-- <span class="p-column-title">Vencimento</span> -->
               {{ lancamento.dataVencimento | date:'dd/MM/yyyy' }}
             </td>
             <td class="col-data">
-              <span class="p-column-title">Pagamento</span>
+              <!-- <span class="p-column-title">Pagamento</span> -->
               {{ lancamento.dataPagamento | date:'dd/MM/yyyy'}}
             </td>
             <td class="col-valor-content">
-              <span class="p-column-title">Valor</span>
+              <!-- <span class="p-column-title">Valor</span> -->
               <span [ngStyle]="{color: lancamento.tipo == 'DESPESA' ? 'red'  : 'blue'}">
                 {{lancamento.valor | currency:'R$' }}
               </span>
             </td>
             <td class="col-acoes">
-              <span class="p-column-title">Editar/Excluir</span>
               <button class="mr-2" [disabled]="!authService.temPermissao('ROLE_CADASTRAR_LANCAMENTO')"
                 [routerLink]="['/lancamentos', lancamento.id]" pButton pTooltip="Editar" tooltipPosition="top"
                 icon="pi pi-pencil"></button>

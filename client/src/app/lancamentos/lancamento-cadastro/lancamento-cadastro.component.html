@@ -8,7 +8,7 @@
 
     <div class="col-12">
       <label for="tipo">Tipo de lançamento</label>
-      <p-selectButton required formControlName="tipo" name="tipo" [options]="tipos ?? []"
+      <p-selectButton required formControlName="tipo" name="tipo" [options]="tipos || []"
         ></p-selectButton>
       <app-mensagem-erro [control]="form.get('tipo')" mensagem="Necessário escolher algum valor!"
         erro="required"></app-mensagem-erro>
@@ -50,11 +50,11 @@
     <div class="p-fluid block md:flex">
       <div class="col-12 md:col-6 p-fluid" formGroupName="categoria">
         <label class="block" for="">Categoria</label>
-        <p-dropdown formControlName="id"  name="categoria" [options]="categorias ?? []"></p-dropdown>
+        <p-dropdown formControlName="id"  name="categoria" [options]="categorias || []"></p-dropdown>
       </div>
       <div class="col-12 md:col-6 p-fluid" formGroupName="pessoa">
         <label class="block" for="">Pessoa</label>
-        <p-dropdown formControlName="id" name="pessoa" [options]="pessoas ?? []"></p-dropdown>
+        <p-dropdown formControlName="id" name="pessoa" [options]="pessoas || []"></p-dropdown>
       </div>
     </div>
     <div class="col-12 p-fluid ">

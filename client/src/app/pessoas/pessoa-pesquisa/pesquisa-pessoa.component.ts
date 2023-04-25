@@ -15,7 +15,6 @@ import { PessoaService } from "../pessoa.service"
 })
 export class PessoaPesquisaComponent {
 	@ViewChild(Table) private tabela!: Table
-
 	ITENS_POR_PAGINA = 5
 
 	nome = ""
@@ -44,7 +43,7 @@ export class PessoaPesquisaComponent {
 	}
 
 	aoMudarDePagina(event: LazyLoadEvent): void {
-		const pagina = (event.first ?? 0) / (event.rows ?? 1)
+		const pagina = (event.first || 0) / (event.rows || 1)
 		this.pesquisar(pagina)
 	}
 

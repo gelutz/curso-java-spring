@@ -15,8 +15,8 @@ export class MensagemErroComponent {
 
 	temErro(): boolean | undefined {
 		let err = this.control?.hasError(this.erro)
-		if (this.dirty) err = err && (this.control?.dirty ?? false)
-		if (this.touched) err = err && (this.control?.touched ?? false)
+		if (this.dirty) err = err && (this.control?.dirty || false)
+		if (this.touched) err = err && (this.control?.touched || false)
 
 		return err
 	}

@@ -18,6 +18,7 @@ export class RefreshTokenInterceptor {
 					req = req.clone({
 						setHeaders: {
 							Authorization: `Bearer ${localStorage.getItem(environment.jwtLocalStorageKey)}`,
+							"Content-Type": "application/json",
 						},
 					})
 

@@ -3,9 +3,11 @@
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
     "editor.formatOnPaste": false,
     "editor.formatOnType": false,
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file",
+    "editor.formatOnSave": false,
+
   },
+  "typescript.suggest.paths": false,
+  "javascript.suggest.paths": false,
   "[html]":{
     // "editor.defaultFormatter": ""
   }

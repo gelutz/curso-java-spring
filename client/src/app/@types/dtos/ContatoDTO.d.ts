@@ -1,3 +1,6 @@
-import { PessoaDTO } from "./PessoaDTO"
-
-export type ContatoDTO = Omit<PessoaDTO, "contato">
+export type ContatoDTO = {
+	id?: number
+	nome?: string
+	email?: string
+	telefone?: string
+}

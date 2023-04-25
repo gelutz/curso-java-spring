@@ -46,11 +46,11 @@ export class LancamentoService {
 		const url = `${this.baseUrl}`
 		let params = new HttpParams().set("page", `${filtro.pagina}`).set("size", `${filtro.itensPorPagina}`)
 
-		if (filtro.descricao) params = params.set("descricao", filtro.descricao ?? "")
+		if (filtro.descricao) params = params.set("descricao", filtro.descricao || "")
 
-		if (filtro.vencimentoDe) params = params.set("vencimentoDe", filtro.vencimentoDe ?? "")
+		if (filtro.vencimentoDe) params = params.set("vencimentoDe", filtro.vencimentoDe || "")
 
-		if (filtro.vencimentoAte) params = params.set("vencimentoAte", filtro.vencimentoAte ?? "")
+		if (filtro.vencimentoAte) params = params.set("vencimentoAte", filtro.vencimentoAte || "")
 
 		return new Promise((resolve, reject) => {
 			const returned = this.http.get<Pageable<LancamentoDTO[]>>(url, { headers: this.headers, params })

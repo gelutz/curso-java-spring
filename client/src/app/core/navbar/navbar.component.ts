@@ -10,7 +10,27 @@ import { AuthService } from "../../seguranca/auth.service"
 export class NavbarComponent {
 	menuAberto = false
 
-	constructor(protected authService: AuthService, private router: Router) {}
+	constructor(protected authService: AuthService, private router: Router) {
+		// fromEvent(document, "click")
+		// 	.pipe(map((ev) => ev.target as HTMLButtonElement))
+		// 	.subscribe({
+		// 		next: (el) => {
+		// 			let temp = false
+		// 			if (el.id != "botao-menu" && !temp) {
+		// 				temp = true
+		// 				this.menuAberto = false
+		// 			}
+		// 			if ((el.parentNode as HTMLElement).id != "botao-menu" && !temp) {
+		// 				temp = true
+		// 				this.menuAberto = false
+		// 			}
+		// 			if ((el.parentNode?.parentNode as HTMLElement).id != "botao-menu" && !temp) {
+		// 				temp = true
+		// 				this.menuAberto = false
+		// 			}
+		// 		},
+		// 	})
+	}
 
 	toggleMenu(): boolean {
 		this.menuAberto = !this.menuAberto

@@ -50,15 +50,15 @@ export class LancamentoCadastroComponent {
 
 			this.categoriaService.buscarCategorias().then((categorias) => {
 				this.categorias = categorias.map((categoria) => ({
-					label: categoria.nome ?? "",
-					value: categoria.id ?? 1,
+					label: categoria.nome || "",
+					value: categoria.id || 1,
 				}))
 			})
 
 			this.pessoaService.pesquisarAtivos({}).then((pessoas) => {
 				this.pessoas = pessoas.content.map((pessoa) => ({
-					label: pessoa.nome ?? "",
-					value: pessoa.id ?? 1,
+					label: pessoa.nome || "",
+					value: pessoa.id || 1,
 				}))
 			})
 		} catch (error) {

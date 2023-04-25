@@ -77,7 +77,7 @@ export class LancamentoPesquisaComponent {
 	}
 
 	aoMudarDePagina(event: LazyLoadEvent): void {
-		const pagina = (event.first ?? 0) / (event.rows ?? 1)
+		const pagina = (event.first || 0) / (event.rows || 1)
 		this.pesquisar(pagina)
 	}
 }
