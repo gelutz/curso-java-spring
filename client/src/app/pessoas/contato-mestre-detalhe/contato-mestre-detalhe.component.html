@@ -1,0 +1,77 @@
+
+<div class="col-12">
+  <p-panel>
+    <ng-template pTemplate="header">
+      <span class="text-2xl text-600">Contatos</span>
+    </ng-template>
+    <ng-template pTemplate="icons">
+      <button class="h-3rem w-4rem" (click)="abrirModalContato()" pButton icon="pi pi-plus" type="button"></button>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <div class="grid">
+        <div class="col-12">
+          <p-table [value]="contatos" [responsive]="true">
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">
+                  Nenhum contato encontrado
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="col-1">ID</th>
+                <th class="col-4">Nome</th>
+                <th class="col-3">E-mail</th>
+                <th class="col-2">Telefone</th>
+                <th>Editar/Excluir</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-contato>
+              <tr>
+                <td>{{ contato.id }}</td>
+                <td>{{ contato.nome }}</td>
+                <td>{{ contato.email }}</td>
+                <td>{{ contato.telefone }}</td>
+                <td class="col-acoes">
+                  <span class="p-column-title">Editar/Excluir</span>
+                  <button class="mr-2" (click)="editarContato(contato)" pButton pTooltip="Editar"
+                    tooltipPosition="top" icon="pi pi-pencil" type="button"></button>
+
+                  <button pButton (click)="excluirContato(contato.id)" tooltipPosition="top"
+                    icon="pi pi-trash" type="button"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </ng-template>
+  </p-panel>
+
+  <p-dialog header="Novo Contato" [(visible)]="exbindoFormularioContato" [modal]="true">
+    <form #formContato="ngForm" (ngSubmit)="editandoContato ? salvarContato(contato.id) : salvarContato()">
+      <div class="grid col-12">
+        <label for="nome">Nome</label>
+        <input pInputText name="nome" #nomeContato="ngModel" [(ngModel)]="contato.nome" required type="text" >
+      </div>
+      <app-mensagem-erro [control]="nomeContato" [touched]="true" mensagem="Campo obrigatório!"
+      erro="required"></app-mensagem-erro>
+      <div class="grid col-12">
+        <label for="email">E-mail</label>
+        <input pInputText name="email" #emailContato="ngModel" [(ngModel)]="contato.email" required email type="text" >
+      </div>
+      <app-mensagem-erro [control]="emailContato" [touched]="true" mensagem="Campo obrigatório!"
+      erro="required"></app-mensagem-erro>
+      <app-mensagem-erro [control]="emailContato" mensagem="O e-mail não é válido!"
+      erro="email"></app-mensagem-erro>
+      <div class="grid col-12">
+        <label for="telefone">Telefone</label>
+        <p-inputMask mask="(99)99999-9999" name="telefone" #telefoneContato="ngModel" [(ngModel)]="contato.telefone" type="mask" pInputMask></p-inputMask>
+      </div>
+      <app-mensagem-erro [control]="telefoneContato" [touched]="true" mensagem="Campo obrigatório!"
+      erro="required"></app-mensagem-erro>
+      <button class="end-buttons" [disabled]="!formContato.valid" pButton type="submit">Salvar</button>
+    </form>
+  </p-dialog>
+</div>

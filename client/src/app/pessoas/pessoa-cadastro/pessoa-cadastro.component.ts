@@ -23,13 +23,6 @@ class Pessoa {
 	contatos: ContatoDTO[] = []
 }
 
-class Contato {
-	id?: number
-	nome = ""
-	email = ""
-	telefone = ""
-}
-
 @Component({
 	selector: "app-pessoa-cadastro",
 	templateUrl: "./pessoa-cadastro.component.html",
@@ -40,9 +33,6 @@ export class PessoaCadastroComponent {
 
 	id: string | number = 0
 	pessoa = new Pessoa()
-	contato = new Contato()
-	exbindoFormularioContato = false
-	editandoContato = false
 
 	constructor(
 		private pessoaService: PessoaService,
@@ -63,10 +53,6 @@ export class PessoaCadastroComponent {
 		}
 
 		this.atualizarTitulo()
-	}
-
-	protected getIndexContatoByID = (id: number): number => {
-		return this.pessoa.contatos.indexOf(this.pessoa.contatos.filter((contato) => contato.id === id)[0])
 	}
 
 	atualizarTitulo(): void {
@@ -149,34 +135,5 @@ export class PessoaCadastroComponent {
 			message: "Deseja excluir a Pessoa?",
 			accept: async () => await this.excluir(id),
 		})
-	}
-
-	abrirModalContato = () => (this.exbindoFormularioContato = true)
-	fecharModalContato = () => {
-		this.exbindoFormularioContato = false
-		this.editandoContato = false
-	}
-
-	editarContato(contato: Contato) {
-		this.editandoContato = true
-		this.abrirModalContato()
-		this.contato = { ...contato }
-	}
-
-	salvarContato(id?: number): void {
-		if (id) {
-			const index = this.getIndexContatoByID(id)
-			this.pessoa.contatos[index] = this.contato
-		} else {
-			this.pessoa.contatos?.push(this.contato)
-		}
-
-		this.fecharModalContato()
-		this.contato = new Contato()
-	}
-
-	excluirContato(id: number): void {
-		const index = this.getIndexContatoByID(id)
-		this.pessoa.contatos.splice(index, 1)
 	}
 }
