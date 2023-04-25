@@ -62,13 +62,9 @@ public class PessoaResource {
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
 	public ResponseEntity<Pessoa> buscarPorId(@PathVariable Long id) {
-		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
+		Pessoa pessoa = pessoaService.buscarPorId(id);
 
-		if (pessoa.isEmpty() || !pessoa.get().isAtivo()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(pessoa.get());
+		return ResponseEntity.ok(pessoa);
 	}
 	// [/GET]
 

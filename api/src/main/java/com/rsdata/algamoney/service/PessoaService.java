@@ -17,16 +17,12 @@ public class PessoaService {
 	private PessoaRepository pessoaRepository;
 
 	public Pessoa buscarPorId(Long id) {
-		return pessoaRepository.findById(id).get();
-	}
-
-	public Pessoa buscarSeExisteEAtivo(Long id) {
-		Pessoa pessoa = pessoaRepository.findById(id).get();
-		if (pessoa == null || !pessoa.isAtivo()) {
+		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
+		if (pessoa.isEmpty()) {
 			return null;
 		}
 
-		return pessoa;
+		return pessoa.get();
 	}
 
 	public Pessoa salvar(Pessoa pessoa) {
@@ -47,6 +43,8 @@ public class PessoaService {
 
 		pessoaSalva.getContatos().clear();
 		pessoaSalva.getContatos().addAll(dados.getContatos());
+		System.out.println("-x-x-x-x-");
+		System.out.println(dados.getContatos().toString());
 		pessoaSalva.getContatos().forEach(contato -> contato.setPessoa(pessoaSalva));
 
 		BeanUtils.copyProperties(dados, pessoaSalva, "id", "contatos");
