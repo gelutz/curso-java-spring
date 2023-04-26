@@ -43,8 +43,6 @@ public class PessoaService {
 
 		pessoaSalva.getContatos().clear();
 		pessoaSalva.getContatos().addAll(dados.getContatos());
-		System.out.println("-x-x-x-x-");
-		System.out.println(dados.getContatos().toString());
 		pessoaSalva.getContatos().forEach(contato -> contato.setPessoa(pessoaSalva));
 
 		BeanUtils.copyProperties(dados, pessoaSalva, "id", "contatos");

@@ -1,8 +1,8 @@
 package com.rsdata.algamoney.model;
 
-import java.util.Objects;
-
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class Endereco {
@@ -11,8 +11,10 @@ public class Endereco {
 	private String complemento;
 	private String bairro;
 	private String cep;
-	private String cidade;
-	private String estado;
+
+	@ManyToOne
+	@JoinColumn(name = "cidade_id")
+	private Cidade cidade;
 
 	public Endereco() {
 	}
@@ -24,8 +26,6 @@ public class Endereco {
 		this.complemento = complemento;
 		this.bairro = bairro;
 		this.cep = cep;
-		this.cidade = cidade;
-		this.estado = estado;
 	}
 
 	public String getLogradouro() {
@@ -68,74 +68,12 @@ public class Endereco {
 		this.cep = cep;
 	}
 
-	public String getCidade() {
-		return this.cidade;
+	public Cidade getCidade() {
+		return cidade;
 	}
 
-	public void setCidade(String cidade) {
+	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
-	}
-
-	public String getEstado() {
-		return this.estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Endereco logradouro(String logradouro) {
-		setLogradouro(logradouro);
-		return this;
-	}
-
-	public Endereco numero(String numero) {
-		setNumero(numero);
-		return this;
-	}
-
-	public Endereco complemento(String complemento) {
-		setComplemento(complemento);
-		return this;
-	}
-
-	public Endereco bairro(String bairro) {
-		setBairro(bairro);
-		return this;
-	}
-
-	public Endereco cep(String cep) {
-		setCep(cep);
-		return this;
-	}
-
-	public Endereco cidade(String cidade) {
-		setCidade(cidade);
-		return this;
-	}
-
-	public Endereco estado(String estado) {
-		setEstado(estado);
-		return this;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (!(o instanceof Endereco)) {
-			return false;
-		}
-		Endereco endereco = (Endereco) o;
-		return Objects.equals(logradouro, endereco.logradouro) && Objects.equals(numero, endereco.numero)
-				&& Objects.equals(complemento, endereco.complemento) && Objects.equals(bairro, endereco.bairro)
-				&& Objects.equals(cep, endereco.cep) && Objects.equals(cidade, endereco.cidade)
-				&& Objects.equals(estado, endereco.estado);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(logradouro, numero, complemento, bairro, cep, cidade, estado);
 	}
 
 }
