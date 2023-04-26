@@ -11,10 +11,7 @@ import { formatISOToDate } from "../../core/utils/DateFormatter"
 import { PessoaService } from "../../pessoas/pessoa.service"
 import { LancamentoService } from "../lancamento.service"
 
-type SelectOptions = {
-	label: string
-	value: number | string | { id: number }
-}
+
 
 @Component({
 	selector: "app-lancamento-cadastro",
@@ -26,9 +23,9 @@ export class LancamentoCadastroComponent {
 	form = {} as FormGroup
 
 	id: string | number = 0
-	tipos?: SelectOptions[]
-	categorias?: SelectOptions[]
-	pessoas?: SelectOptions[]
+	tipos?: SelectOptionsDTO[]
+	categorias?: SelectOptionsDTO[]
+	pessoas?: SelectOptionsDTO[]
 
 	arquivo = ""
 	pathArquivo = ""
@@ -61,7 +58,7 @@ export class LancamentoCadastroComponent {
 				}))
 			})
 
-			this.pessoaService.pesquisarAtivos({}).then((pessoas) => {
+			this.pessoaService.pesquisarAtivos().then((pessoas) => {
 				this.pessoas = pessoas.content.map((pessoa) => ({
 					label: pessoa.nome || "",
 					value: pessoa.id || 1,
@@ -119,7 +116,7 @@ export class LancamentoCadastroComponent {
 	private async carregarLancamentos(): Promise<void> {
 		try {
 			const lancamento = await this.lancamentoService.buscarPorID(this.id as number)
-
+			console.log(lancamento)
 			this.form.patchValue(lancamento)
 			this.form.patchValue({
 				dataVencimento: formatISOToDate(lancamento.dataVencimento),

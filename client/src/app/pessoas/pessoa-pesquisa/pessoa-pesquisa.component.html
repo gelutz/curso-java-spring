@@ -1,6 +1,6 @@
 <div class="toda-table">
   <form (ngSubmit)="pesquisar()">
-    <div class="grid">
+    <div>
 
       <div class="col-12">
         <h1>Pessoas</h1>
@@ -18,7 +18,7 @@
     </div>
 
   </form>
-  <div class="grid">
+  <div class="">
     <div class="col-12 p-fluid">
       <p-table [value]="this.response.content" [lazy]="true" [responsive]="true" [paginator]="true"
         [rows]="this.ITENS_POR_PAGINA" [totalRecords]="this.response.totalElements"
@@ -46,11 +46,11 @@
             </td>
             <td>
               <span class="p-column-title">Cidade</span>
-              {{ pessoa.endereco?.cidade }}
+              {{ pessoa.endereco?.cidade.nome }}
             </td>
             <td class="col-data">
               <span class="p-column-title">Estado</span>
-              {{ pessoa.endereco?.estado }}
+              {{ pessoa.endereco?.cidade.estado.nome }}
             </td>
             <td class="col-acoes">
               <span class="p-column-title">Editar/Excluir</span>

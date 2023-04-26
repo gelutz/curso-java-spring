@@ -1,9 +1,3 @@
-@media (min-width: 960px) {
-  .container {
-    width: 930px;
-    margin: 0 auto;
-  }
-}
 
 .label {
   margin: 0.5em;

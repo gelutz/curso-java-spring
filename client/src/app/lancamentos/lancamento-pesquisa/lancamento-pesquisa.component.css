@@ -1,16 +1,10 @@
-@media (min-width: 960px) {
-  .container {
-    width: 930px;
-    margin: 0 auto;
-  }
-}
 
 .label {
   margin: 0.5em;
 }
 
 .toda-table {
-  padding: 2em;
+  /* padding: 2em; */
   margin-top: .5em;
 }
 

@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { environment } from "src/environments/environment"
+import { CidadeDTO } from "../@types/dtos/CidadeDTO"
+import { EstadoDTO } from "../@types/dtos/EstadoDTO"
 import { PessoaDTO } from "../@types/dtos/PessoaDTO"
 import { Pageable } from "../@types/filtros/Pageable"
 import { PessoaFiltro } from "../@types/filtros/PessoaFiltro"
@@ -12,9 +14,32 @@ export class PessoaService {
 	headers = new HttpHeaders().append("Content-Type", "application/json")
 
 	baseUrl = `${environment.baseUrl}/pessoas`
-	constructor(private http: HttpClient) {}
+	cidadesUrl = `${environment.baseUrl}/cidades`
+	estadosUrl = `${environment.baseUrl}/estados`
 
-	async pesquisarAtivos(filtro: PessoaFiltro): Promise<Pageable<PessoaDTO[]>> {
+	constructor(private http: HttpClient) { }
+
+	find = <T>(url = this.baseUrl, options: { params?: any, headers?: any } = {}): Promise<T> => new Promise((resolve, reject) => {
+		const returned = this.http.get<T>(url, { ...options })
+
+		returned.subscribe({
+			next: resolve,
+			error: reject,
+		})
+	})
+
+	async listarEstados() {
+		return await this.find<EstadoDTO[]>(this.estadosUrl)
+	}
+
+	async pesquisarCidades(estadoID: number) {
+		const headers = new HttpHeaders().append("Content-Type", "application/json")
+		const params = new HttpParams().set("estado", `${estadoID}`)
+
+		return await this.find<CidadeDTO[]>(this.cidadesUrl, { headers, params })
+	}
+
+	async pesquisarAtivos(filtro: PessoaFiltro = {}): Promise<Pageable<PessoaDTO[]>> {
 		const pessoas = await this.pesquisar(filtro)
 
 		pessoas.content = pessoas.content.filter((p) => p.ativo)
@@ -82,7 +107,7 @@ export class PessoaService {
 		})
 	}
 
-	mudarAtivo(id: number, currentState: boolean): Promise<PessoaDTO> {
+	async mudarAtivo(id: number, currentState: boolean): Promise<PessoaDTO> {
 		const url = `${this.baseUrl}/${id}/ativo`
 
 		return new Promise((resolve, reject) => {
@@ -94,7 +119,7 @@ export class PessoaService {
 		})
 	}
 
-	excluir(id: number): Promise<void> {
+	async excluir(id: number): Promise<void> {
 		const url = `${this.baseUrl}/${id}`
 		return new Promise((resolve, reject) => {
 			const returned = this.http.delete<PessoaDTO>(url)

@@ -8,7 +8,7 @@
       <button class="h-3rem w-4rem" (click)="abrirModalContato()" pButton icon="pi pi-plus" type="button"></button>
     </ng-template>
     <ng-template pTemplate="body">
-      <div class="grid">
+      <div >
         <div class="col-12">
           <p-table [value]="contatos" [responsive]="true">
             <ng-template pTemplate="emptymessage">
@@ -51,13 +51,13 @@
 
   <p-dialog header="Novo Contato" [(visible)]="exbindoFormularioContato" [modal]="true">
     <form #formContato="ngForm" (ngSubmit)="editandoContato ? salvarContato(contato.id) : salvarContato()">
-      <div class="grid col-12">
+      <div class=" col-12">
         <label for="nome">Nome</label>
         <input pInputText name="nome" #nomeContato="ngModel" [(ngModel)]="contato.nome" required type="text" >
       </div>
       <app-mensagem-erro [control]="nomeContato" [touched]="true" mensagem="Campo obrigatório!"
       erro="required"></app-mensagem-erro>
-      <div class="grid col-12">
+      <div class=" col-12">
         <label for="email">E-mail</label>
         <input pInputText name="email" #emailContato="ngModel" [(ngModel)]="contato.email" required email type="text" >
       </div>
@@ -65,7 +65,7 @@
       erro="required"></app-mensagem-erro>
       <app-mensagem-erro [control]="emailContato" mensagem="O e-mail não é válido!"
       erro="email"></app-mensagem-erro>
-      <div class="grid col-12">
+      <div class=" col-12">
         <label for="telefone">Telefone</label>
         <p-inputMask mask="(99)99999-9999" name="telefone" #telefoneContato="ngModel" [(ngModel)]="contato.telefone" type="mask" pInputMask></p-inputMask>
       </div>

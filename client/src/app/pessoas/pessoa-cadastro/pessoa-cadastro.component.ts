@@ -3,6 +3,7 @@ import { Title } from "@angular/platform-browser"
 import { ActivatedRoute, Router } from "@angular/router"
 import { ConfirmationService, MessageService } from "primeng/api"
 import { Table } from "primeng/table"
+import { CidadeDTO } from "src/app/@types/dtos/CidadeDTO"
 import { ContatoDTO } from "src/app/@types/dtos/ContatoDTO"
 import { EnderecoDTO } from "../../@types/dtos/EnderecoDTO"
 import { ErrorHandlerService } from "../../core/services/error-handler.service"
@@ -13,8 +14,7 @@ class Pessoa {
 	nome = ""
 	ativo = true
 	endereco: EnderecoDTO = {
-		estado: "",
-		cidade: "",
+		cidade: {} as CidadeDTO,
 		bairro: "",
 		cep: "",
 		logradouro: "",
@@ -33,6 +33,11 @@ export class PessoaCadastroComponent {
 
 	id: string | number = 0
 	pessoa = new Pessoa()
+	estados: SelectOptionsDTO[] = []
+	cidades: SelectOptionsDTO[] = []
+
+	estadoSelecionado?: number
+	cidadeSelecionada?: number
 
 	constructor(
 		private pessoaService: PessoaService,
@@ -42,15 +47,20 @@ export class PessoaCadastroComponent {
 		private router: Router,
 		private title: Title,
 		private confirmationService: ConfirmationService
-	) {}
+	) {
+		this.carregarEstados().then(() => {
+			if (!this.isEdicao()) return
+
+			// deixar rodando de forma assíncrona para ter menor tempo de loading
+			this.carregarPessoas().then(() => {
+				this.carregarCidades(this.pessoa.endereco.cidade.estado.id)
+			})
+		})
+	}
 	protected isEdicao = (): boolean => !(!(this.id != undefined) || !(this.id != "novo"))
 
-	async ngOnInit(): Promise<void> {
+	ngOnInit(): void {
 		this.id = this.route.snapshot.params["id"]
-
-		if (this.isEdicao()) {
-			await this.carregarPessoas()
-		}
 
 		this.atualizarTitulo()
 	}
@@ -63,12 +73,41 @@ export class PessoaCadastroComponent {
 	async carregarPessoas(): Promise<void> {
 		try {
 			const pessoa = await this.pessoaService.buscarPorID(this.id as number)
+
 			if (pessoa == null) {
 				this.router.navigate(["/pessoas"])
 				return
 			}
 
 			Object.assign(this.pessoa, pessoa)
+
+			this.estadoSelecionado = this.pessoa.endereco.cidade.estado.id
+		} catch (error) {
+			this.errorHandler.handle(error)
+		}
+	}
+
+	async carregarEstados(): Promise<void> {
+		try {
+			const estados = await this.pessoaService.listarEstados()
+			this.estados = estados.map(estado => ({
+				label: estado.nome,
+				value: estado.id
+			}))
+		} catch (error) {
+			this.errorHandler.handle(error)
+		}
+	}
+
+	async carregarCidades(estadoID: number): Promise<void> {
+		try {
+			const cidades = await this.pessoaService.pesquisarCidades(estadoID)
+			this.cidades = cidades.map(estado => ({
+				label: estado.nome,
+				value: estado.id
+			}))
+
+			this.cidadeSelecionada = this.pessoa.endereco.cidade.id
 		} catch (error) {
 			this.errorHandler.handle(error)
 		}

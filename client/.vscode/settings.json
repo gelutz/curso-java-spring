@@ -3,5 +3,4 @@
   "editor.formatOnType": false,
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-
 }
