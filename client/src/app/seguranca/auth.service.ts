@@ -47,7 +47,7 @@ export class AuthService {
 						this.jwtPayload = this.decodeToken(resposta.access_token)
 						this.armazenarToken(resposta)
 					}
-					console.log("~ login bem sucedido:")
+
 					this.messageService.add({ severity: "success", detail: "Login bem sucedido." })
 
 					resolve()
@@ -80,7 +80,7 @@ export class AuthService {
 				},
 				error: (error) => {
 					if (error?.error?.error == "invalid_token") {
-						console.log("~ error:", error)
+
 						error = new AuthError("Sessão expirada, favor fazer login novamente")
 						this.logout()
 					}

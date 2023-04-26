@@ -15,8 +15,9 @@ export class LoginComponent {
 		this.document = document
 	}
 
-	login(): void {
-		this.authService.login(this.usuario, this.senha)
-		this.router.navigate(["/lancamentos"])
+	async login(): Promise<void> {
+		this.authService.login(this.usuario, this.senha).then(() => {
+			this.router.navigate(["/lancamentos"])
+		})
 	}
 }
