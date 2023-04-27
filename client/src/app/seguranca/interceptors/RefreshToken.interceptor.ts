@@ -12,12 +12,12 @@ export class RefreshTokenInterceptor {
 	constructor(private auth: AuthService) {}
 
 	intercept(req: HttpRequest<JwtResponse>, next: HttpHandler): InterceptReturn {
-		if (!req.url.includes("/oauth/token") && this.auth.isTokenExpired()) {
+		if (!req.url.includes("/oauth2/token") && this.auth.isTokenExpired()) {
 			return from(this.auth.renovarAccessToken()).pipe(
 				mergeMap(() => {
 					req = req.clone({
 						setHeaders: {
-							Authorization: `Bearer ${localStorage.getItem(environment.jwtLocalStorageKey)}`,
+							Authorization: `Bearer ${localStorage.getItem(environment.localStorage.jwtKey)}`,
 							"Content-Type": "application/json",
 						},
 					})

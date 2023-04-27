@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
 
 			return this.authService.renovarAccessToken().then(() => {
 				if (this.authService.isTokenExpired()) {
-					this.router.navigate(["/login"])
+					this.authService.login()
 					return false
 				}
 
@@ -44,7 +44,7 @@ export class AuthGuard implements CanActivate {
 
 			if (roles.length == 0) {
 				this.messageService.add({ severity: "error", detail: "Acesso negado." })
-				this.router.navigate(["/login"])
+				this.authService.login()
 				return false
 			}
 			return true

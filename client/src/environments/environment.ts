@@ -5,12 +5,20 @@
 export const environment = {
 	production: false,
 	baseUrl: 'http://localhost:8080',
+	tokenAllowedDomains: [/localhost:8080/],
+	tokenDisasllowedRoutes: [/\/oauth2\/token/],
+	oauthCallbackUrl: "http://localhost:4200/authorized",
 	auth: {
 		basic: 'YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==',
 		jwtBasic: 'YW5ndWxhcjpAbmd1bEByMA==',
 		jwtSecret: 's3cr3t'
 	},
-	jwtLocalStorageKey: 'algamoney:jwt'
+	localStorage: {
+		jwtKey: 'algamoney:jwt',
+		stateKey: 'algamoney:state',
+		codeKey: 'algamoney:code',
+		refreshKey: 'algamoney:refresh'
+	}
 }
 
 /*

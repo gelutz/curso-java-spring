@@ -7,15 +7,17 @@ import { ButtonModule } from "primeng/button"
 import { InputTextModule } from "primeng/inputtext"
 import { RippleModule } from "primeng/ripple"
 import { environment } from "src/environments/environment"
+import { AuthorizedComponent } from './authorized/authorized.component'
 import { RefreshTokenInterceptor } from "./interceptors/RefreshToken.interceptor"
-import { LoginComponent } from "./login/login.component"
 
 export function tokenGetter(): string {
-	return localStorage.getItem(environment.jwtLocalStorageKey) || ""
+	return localStorage.getItem(environment.localStorage.jwtKey) || ""
 }
 
 @NgModule({
-	declarations: [LoginComponent],
+	declarations: [
+    AuthorizedComponent
+  ],
 	imports: [
 		CommonModule,
 		InputTextModule,

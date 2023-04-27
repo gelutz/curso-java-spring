@@ -17,7 +17,7 @@ export class LancamentoService {
 
 	uploadHeaders = new HttpHeaders().append(
 		"Authorization",
-		`Bearer ${localStorage.getItem(environment.jwtLocalStorageKey)}`
+		`Bearer ${localStorage.getItem(environment.localStorage.jwtKey)}`
 	)
 
 	constructor(private http: HttpClient, private auth: AuthService) {}

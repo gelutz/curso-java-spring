@@ -1,8 +1,10 @@
 package com.rsdata.algamoney.config;
 
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(value = "lutz-security")
+@ConfigurationProperties(value = "lutz")
 public class ApiProperty {
 
 	private final String origemPermitida = "http://localhost:4200";
@@ -23,18 +25,26 @@ public class ApiProperty {
 	}
 
 	public class Seguranca {
-		private boolean enableHttps;
 
-		public Seguranca() {
+		public List<String> redirectsPermitidos;
+		public String authServerUrl;
+
+		public List<String> getRedirectsPermitidos() {
+			return redirectsPermitidos;
 		}
 
-		public boolean isEnableHttps() {
-			return enableHttps;
+		public void setRedirectsPermitidos(List<String> redirectsPermitidos) {
+			this.redirectsPermitidos = redirectsPermitidos;
 		}
 
-		public void setEnableHttps(boolean enableHttps) {
-			this.enableHttps = enableHttps;
+		public String getAuthServerUrl() {
+			return authServerUrl;
 		}
+
+		public void setAuthServerUrl(String authServerUrl) {
+			this.authServerUrl = authServerUrl;
+		}
+
 	}
 
 	public class Mail {

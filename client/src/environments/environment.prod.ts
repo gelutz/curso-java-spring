@@ -6,5 +6,5 @@ export const environment = {
 		jwtBasic: 'YW5ndWxhcjpAbmd1bEByMA==',
 		jwtSecret: 's3cr3t'
 	},
-	jwtLocalStorageKey: 'algamoney:jwt'
+	localStorage.jwtKey: 'algamoney:jwt'
 }

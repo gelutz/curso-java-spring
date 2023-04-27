@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { Injectable } from "@angular/core"
-import { Router } from "@angular/router"
 import { MessageService } from "primeng/api"
 import { AuthError } from "../errors/AuthError"
 
@@ -10,7 +9,7 @@ import { AuthError } from "../errors/AuthError"
 export class ErrorHandlerService {
 	redirect = false
 	message = ""
-	constructor(private messageService: MessageService, private router: Router) {}
+	constructor(private messageService: MessageService) {}
 
 	handle(error: unknown): void {
 		// erro interno
@@ -63,7 +62,7 @@ export class ErrorHandlerService {
 		this.messageService.add({ severity: "error", detail: this.message })
 
 		if (this.redirect) {
-			this.router.navigate(["/login"])
+			// this.authService.login()
 		}
 	}
 }
